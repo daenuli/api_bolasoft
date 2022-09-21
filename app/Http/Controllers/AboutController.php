@@ -8,8 +8,8 @@ class AboutController extends Controller
 {
     public function index()
     {
-        return response()->json(auth()->user()->student);
-        // return response()->json(auth()->user());
+        // return response()->json(auth()->user()->student);
+        return response()->json(auth()->user());
     }
 
     // public function update_photo(Request $request)
