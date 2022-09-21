@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('test', function () {
+    $router->post('test', function () {
         return 'hello';
     });
     $router->post('register', 'AuthController@register');
