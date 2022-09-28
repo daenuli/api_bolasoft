@@ -43,8 +43,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('competition_status', 'TournamentController@status');
 
         $router->get('payment', 'PaymentController@index');
-        $router->post('notification', 'PaymentController@notification');
-
+        
         $router->get('logout', 'AuthController@logout');
     });
+    $router->post('notification', 'PaymentController@notification');
 });  
