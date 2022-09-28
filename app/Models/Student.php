@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model 
 {
-    use SoftDeletes;
     
     public $fillable = ['email_verified_at'];
 
@@ -15,7 +14,8 @@ class Student extends Model
     }
 
     public function classes(){
-        return $this->hasMany(Classes::class);
+        return $this->belongsTo(Classes::class, 'class_id', 'id');
+        // return $this->hasMany(Classes::class);
     }
 
     public function schedules(){

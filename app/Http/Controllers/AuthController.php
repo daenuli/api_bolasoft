@@ -46,6 +46,7 @@ class AuthController extends Controller
             // Mail::to($to)->send(new Verification($url));
             // Mail::to('brata@bolasoft.id')->send(new Information($param));
             return response()->json([
+                'status' => 'success',
                 'message' => 'Silahkan cek email untuk aktivasi akun anda'
             ]);
         }
@@ -88,7 +89,10 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Successfully logged out'
+        ]);
     }
 
     /**
@@ -104,6 +108,7 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
+            'status' => 'success',
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60

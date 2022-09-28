@@ -56,4 +56,15 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
     {
         return $this->belongsTo(Student::class, 'detail_id', 'id');
     }
+
+    public function club(){
+        return $this->belongsTo(Club::class, 'club_id');
+    }
+
+    public function order()
+    {
+        return $this->hasOne(Order::class);
+    }
+
+
 }

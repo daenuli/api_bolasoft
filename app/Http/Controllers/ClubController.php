@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Student;
+use App\Models\Classes;
 use App\Models\Club;
 use App\Models\User;
 
@@ -36,19 +38,41 @@ class ClubController extends Controller
 
     public function update(Request $request)
     {
-        if (!empty($request->club_id)) {
-            $user_id = auth()->user()->id;
-            $club = Club::find($request->club_id);
-            $user = User::find($user_id)->update([
-                'club_id' => $request->club_id,
-                'paguyuban_id' => $club->paguyuban_id,
-            ]);
-            return response()->json([
-                'message' => 'The club was successfully updated'
-            ]);
+        if (!empty($request->class_id)) {
+            // if (!empty($request->club_id)) {
+            $student = auth()->user()->student;
+
+            if (isset($student)) {
+                $user_auth = auth()->user();
+                $kelas = Classes::find($request->class_id);
+
+                $club = Club::find($kelas->club_id);
+                // $club = Club::find($request->club_id);
+                $user = User::find($user_auth->id)->update([
+                    'club_id' => $kelas->club_id,
+                    // 'club_id' => $request->club_id,
+                    'paguyuban_id' => $club->paguyuban_id,
+                ]);
+
+                $student = Student::find($user_auth->detail_id);
+                $student->club_id = $kelas->club_id;
+                $student->class_id = $request->class_id;
+                $student->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'The class was successfully updated'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Please complete the profile first'
+                ]);
+            }
         } else {
             return response()->json([
-                'message' => 'Club ID field is required'
+                'status' => 'error',
+                'message' => 'class_id field is required'
             ]);
         }
     }

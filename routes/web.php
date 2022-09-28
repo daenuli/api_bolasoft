@@ -18,23 +18,32 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('test', function () {
-        return 'hello';
+    $router->get('test', function () {
+        // return 'hello';
+        return hash('sha512','135408641020040000SB-Mid-server-W7z9vubSaxwaediNUh7j596i');
     });
     $router->post('register', 'AuthController@register');
     $router->post('login', 'AuthController@login');
     $router->get('refresh', 'AuthController@refresh');
 
     $router->group(['middleware' => 'auth'], function () use ($router) {
-        $router->get('me', 'AboutController@index');
+        $router->get('about/summary', 'AboutController@index');
+        $router->get('about/detail', 'AboutController@detail');
+        
+        $router->post('profile', 'AboutController@update_profile');
         $router->get('home', 'HomeController@index');
 
+        $router->post('kelas', 'KelasController@index');
+
         $router->get('club', 'ClubController@index');
-        $router->post('club', 'ClubController@update');
+        $router->post('choose_kelas', 'ClubController@update');
         $router->get('club/{id}', 'ClubController@show');
 
         $router->get('tournament', 'TournamentController@index');
         $router->get('competition_status', 'TournamentController@status');
+
+        $router->get('payment', 'PaymentController@index');
+        $router->post('notification', 'PaymentController@notification');
 
         $router->get('logout', 'AuthController@logout');
     });
