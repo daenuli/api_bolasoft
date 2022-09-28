@@ -27,7 +27,8 @@ class PaymentController extends Controller
 
         // return $user->order;
 
-        if (isset($user->order)) {
+        if (!empty($user->order)) {
+            // return 'ada';
             return response()->json([
                 'status' => 'error',
                 'message' => 'Tidak boleh melakukan payment lebih dari satu kali',
@@ -92,7 +93,7 @@ class PaymentController extends Controller
         $order->payment_status = 2;
         $order->response_midtrans = $notif;
         $order->save();
-        
+
     }
 
     //
