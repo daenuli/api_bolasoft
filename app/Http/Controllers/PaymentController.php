@@ -5,9 +5,13 @@ use Midtrans\Notification;
 use Midtrans\Config;
 use Midtrans\Snap;
 use App\Models\Order;
+use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    protected $notification;
+    protected $order;
+
     public function __construct()
     {
         Config::$serverKey = config('midtrans.server_key');
@@ -17,6 +21,7 @@ class PaymentController extends Controller
         Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
         Config::$is3ds = true;
+        
     }
 
     public function index()
@@ -37,7 +42,7 @@ class PaymentController extends Controller
             // return 'tidak ada';
             $price = 40000;
 
-            $order_id = rand();
+            $order_id = $this->generateUniqueCode();
             $transaction_detail = array(
                 'order_id' => $order_id,
                 'gross_amount' => $price,
@@ -80,20 +85,74 @@ class PaymentController extends Controller
 
     }
 
-    public function notification()
+    public function notification(Request $request)
     {
-        $notif = new Notification();
-        // $order = Order::where('number', $notif->order_id)->first();
-        // $order->response_midtrans = $notif;
-        // $order->save();
-        $order = new Order;
-        $order->user_id = 1;
-        $order->number = rand();
-        $order->total_price = 45000;
-        $order->payment_status = 2;
-        $order->response_midtrans = $notif;
-        $order->save();
+        // dd($request->all());
+        // $notif = new Notification();
+        $this->_handleNotification();
+        
+        if ($this->isSignatureKeyVerified()) {
+            // if ($this->notification->getResponse()) {
+            $order = Order::where('number', $this->notification->order_id)->first();
+            if ($this->notification->transaction_status == 'pending') {
+                $order->payment_status = 1;
+            } else if ($this->notification->transaction_status == 'capture' || $this->notification->transaction_status == 'settlement') {
+                $order->payment_status = 2;
+            } else if ($this->notification->transaction_status == 'expire') {
+                $order->payment_status = 3;
+            } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
+                $order->payment_status = 4;
+            }
+            $order->response_midtrans = json_encode($this->notification->getResponse(), true);
+            $order->save();
+        }
 
+        // $order = new Order;
+        // $order->user_id = 1;
+        // $order->number = rand();
+        // $order->total_price = 45000;
+        // $order->payment_status = 2;
+        // $order->response_midtrans = $notif->transaction_status;
+        // $order->response_midtrans = json_encode($notif->getResponse(), true);
+        // $order->response_midtrans = json_encode($request->all(), true);
+        // $order->save();
+    }
+
+    public function generateUniqueCode()
+    {
+        do {
+            $code = rand();
+        } while (Order::where('number', $code)->first());
+
+        return $code;
+    }
+
+    public function isSignatureKeyVerified()
+    {
+        return ($this->_createLocalSignatureKey() == $this->notification->signature_key);
+    }
+
+    protected function _createLocalSignatureKey()
+    {
+        $orderId = $this->order->number;
+        $statusCode = $this->notification->status_code;
+        $grossAmount = $this->order->total_price;
+        $serverKey = config('midtrans.server_key');
+        $input = $orderId . $statusCode . $grossAmount . $serverKey;
+        $signature = openssl_digest($input, 'sha512');
+ 
+        return $signature;
+    }
+
+    protected function _handleNotification()
+    {
+        $notification = new Notification();
+ 
+        $orderNumber = $notification->order_id;
+        $order = Order::where('number', $orderNumber)->first();
+ 
+        $this->notification = $notification;
+        $this->order = $order;
     }
 
     //
