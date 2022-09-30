@@ -8,6 +8,7 @@ use App\Models\StudentAsset;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class AboutController extends Controller
 {
@@ -67,6 +68,19 @@ class AboutController extends Controller
 
     public function update_profile(Request $request)
     {
+        // $imageTemp = $request->file('photo')->getPathName();
+        // $destination_photo = './upload/student/hello_akta_'.$request->file('photo')->getClientOriginalName();
+        // $destination_photo = './upload/student/hello_'.$request->file('photo')->getClientOriginalName();
+
+        // dd($destination_photo);
+        // dd($request->file('photo')->getPathName());
+        
+        // return $this->compressImage($imageTemp, $destination_photo, 75);
+
+        // return $request->file('photo')->getMaxFilesize();
+        // $img = Image::make($request->file('photo')->getRealPath());
+        // return $img->filesize();
+        
         $user = auth()->user();
         if ($user->detail_id == 0) {
 
@@ -78,10 +92,10 @@ class AboutController extends Controller
                 'date_of_birth' => 'required|date',
                 'place_of_birth' => 'required|string|min:3|max:255',
                 'address' => 'required|string|min:5|max:255',
-                'photo' => 'required|max:800',
-                'akta' => 'required|max:800',
-                'kartu_keluarga' => 'required|max:800',
-                'ijasah' => 'required|max:800',
+                'photo' => 'required|mimes:jpg,png',
+                'akta' => 'required',
+                'kartu_keluarga' => 'required',
+                'ijasah' => 'required',
             ]);
     
             if ($validator->fails()) {
@@ -124,13 +138,22 @@ class AboutController extends Controller
                 $user->name = $request->name;
                 $user->save();
 
+                if (!is_dir('./upload/student/')) {
+                    mkdir('./upload/student/', 0777, true);
+                }
+
                 if ($request->hasFile('photo')) {
+                    $imageTemp = $request->file('photo')->getPathName();
                     $file_name_photo = $request->file('photo')->getClientOriginalName();
                     $file_ext_photo = $request->file('photo')->getClientOriginalExtension();
 
                     $destination_photo = './upload/student/';
                     $new_file_name_photo = 'pas_photo_' . time() . '.' .$file_ext_photo;
-                    if ($request->file('photo')->move($destination_photo, $new_file_name_photo)) {
+                    
+                    // $this->compressImage($imageTemp, $destination_photo, 75);
+
+                    if ($this->compressImage($imageTemp, $destination_photo.$new_file_name_photo, 75)) {
+                    // if ($request->file('photo')->move($destination_photo, $new_file_name_photo)) {
                         $data[0]['name'] = $file_name_photo;
                         $data[0]['path'] = '/upload/student/' . $new_file_name_photo;
                         $data[0]['status'] = 'pasphoto';
@@ -216,25 +239,44 @@ class AboutController extends Controller
             $user->name = $request->name;
             $user->save();
 
+            if (!is_dir('./upload/student/')) {
+                mkdir('./upload/student/', 0777, true);
+            }
+
             if ($request->hasFile('photo')) {
+                $imageTemp = $request->file('photo')->getPathName();
                 $file_name_photo = $request->file('photo')->getClientOriginalName();
                 $file_ext_photo = $request->file('photo')->getClientOriginalExtension();
 
                 $destination_photo = './upload/student/';
                 $new_file_name_photo = 'pas_photo_' . time() . '.' .$file_ext_photo;
-                if ($request->file('photo')->move($destination_photo, $new_file_name_photo)) {
+                
+                if ($this->compressImage($imageTemp, $destination_photo.$new_file_name_photo, 75)) {
+                // if ($request->file('photo')->move($destination_photo, $new_file_name_photo)) {
                     $sa = StudentAsset::where([
                         ['student_id', $student->id],
                         ['status', 'pasphoto'],
                     ])->first();
 
-                    unlink('.'.$sa->path);
-
-                    $sa->name = $file_name_photo;
-                    $sa->path = '/upload/student/' . $new_file_name_photo;
-                    $sa->status = 'pasphoto';
-                    $sa->mime = $file_ext_photo;
-                    $sa->save();
+                    if (!empty($sa)) {
+                        if (file_exists('.'.$sa->path)) {
+                            unlink('.'.$sa->path);
+                        }
+                        
+                        $sa->name = $file_name_photo;
+                        $sa->path = '/upload/student/' . $new_file_name_photo;
+                        $sa->status = 'pasphoto';
+                        $sa->mime = $file_ext_photo;
+                        $sa->save();
+                    } else {
+                        $asset = new StudentAsset;
+                        $asset->student_id = $student->id;
+                        $asset->name = $file_name_photo;
+                        $asset->path = '/upload/student/' . $new_file_name_photo;
+                        $asset->status = 'pasphoto';
+                        $asset->mime = $file_ext_photo;
+                        $asset->save();
+                    }
                 }
             }
 
@@ -249,12 +291,24 @@ class AboutController extends Controller
                         ['student_id', $student->id],
                         ['status', 'akta_lahir'],
                     ])->first();
-                    unlink('.'.$sa->path);
-                    $sa->name = $file_name_akta;
-                    $sa->path = '/upload/student/' . $new_file_name_akta;
-                    $sa->status = 'akta_lahir';
-                    $sa->mime = $file_ext_akta;
-                    $sa->save();
+                    if (!empty($sa)) {
+                        if (file_exists('.'.$sa->path)) {
+                            unlink('.'.$sa->path);
+                        }
+                        $sa->name = $file_name_akta;
+                        $sa->path = '/upload/student/' . $new_file_name_akta;
+                        $sa->status = 'akta_lahir';
+                        $sa->mime = $file_ext_akta;
+                        $sa->save();
+                    } else {
+                        $asset = new StudentAsset;
+                        $asset->student_id = $student->id;
+                        $asset->name = $file_name_akta;
+                        $asset->path = '/upload/student/' . $new_file_name_akta;
+                        $asset->status = 'akta_lahir';
+                        $asset->mime = $file_ext_akta;
+                        $asset->save();
+                    }
                 }
             }
 
@@ -269,12 +323,24 @@ class AboutController extends Controller
                         ['student_id', $student->id],
                         ['status', 'kartu_keluarga'],
                     ])->first();
-                    unlink('.'.$sa->path);
-                    $sa->name = $file_name_kk;
-                    $sa->path = '/upload/student/' . $new_file_name_kk;
-                    $sa->status = 'kartu_keluarga';
-                    $sa->mime = $file_ext_akta;
-                    $sa->save();
+                    if (!empty($sa)) {
+                        if (file_exists('.'.$sa->path)) {
+                            unlink('.'.$sa->path);
+                        }
+                        $sa->name = $file_name_kk;
+                        $sa->path = '/upload/student/' . $new_file_name_kk;
+                        $sa->status = 'kartu_keluarga';
+                        $sa->mime = $file_ext_kk;
+                        $sa->save();
+                    } else {
+                        $asset = new StudentAsset;
+                        $asset->student_id = $student->id;
+                        $asset->name = $file_name_kk;
+                        $asset->path = '/upload/student/' . $new_file_name_kk;
+                        $asset->status = 'kartu_keluarga';
+                        $asset->mime = $file_ext_kk;
+                        $asset->save();
+                    }
                 }
             }
 
@@ -289,12 +355,24 @@ class AboutController extends Controller
                         ['student_id', $student->id],
                         ['status', 'ijasah'],
                     ])->first();
-                    unlink('.'.$sa->path);
-                    $sa->name = $file_name_ijazah;
-                    $sa->path = '/upload/student/' . $new_file_name_ijazah;
-                    $sa->status = 'ijasah';
-                    $sa->mime = $file_ext_ijazah;
-                    $sa->save();
+                    if (!empty($sa)) {
+                        if (file_exists('.'.$sa->path)) {
+                            unlink('.'.$sa->path);
+                        }
+                        $sa->name = $file_name_ijazah;
+                        $sa->path = '/upload/student/' . $new_file_name_ijazah;
+                        $sa->status = 'ijasah';
+                        $sa->mime = $file_ext_ijazah;
+                        $sa->save();
+                    } else {
+                        $asset = new StudentAsset;
+                        $asset->student_id = $student->id;
+                        $asset->name = $file_name_ijazah;
+                        $asset->path = '/upload/student/' . $new_file_name_ijazah;
+                        $asset->status = 'ijasah';
+                        $asset->mime = $file_ext_ijazah;
+                        $asset->save();
+                    }
                 }
             }
 
@@ -303,6 +381,36 @@ class AboutController extends Controller
                 'message' => 'The profile was successfully updated'
             ]);
         }
+    }
+
+    public function compressImage($source, $destination, $quality) { 
+        // Get image info 
+        $imgInfo = getimagesize($source); 
+        $mime = $imgInfo['mime']; 
+         
+        // Create a new image from file 
+        switch($mime){ 
+            case 'image/jpeg': 
+                $image = imagecreatefromjpeg($source); 
+                break; 
+            case 'image/png': 
+                $image = imagecreatefrompng($source); 
+                break;
+            default: 
+                $image = imagecreatefromjpeg($source); 
+        } 
+         
+        // Save image 
+        imagejpeg($image, $destination, $quality); 
+         
+        // Return compressed image 
+        return $destination; 
+    }
+
+    public function convert_filesize($bytes, $decimals = 2) { 
+        $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB'); 
+        $factor = floor((strlen($bytes) - 1) / 3); 
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor]; 
     }
 
     // public function update_photo(Request $request)

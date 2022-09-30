@@ -46,5 +46,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         
         $router->get('logout', 'AuthController@logout');
     });
+
     $router->post('notification', 'PaymentController@notification');
+    $router->get('activation/student/{token}', ['as' => 'activation.student', 'uses' => 'AuthController@student_activation']);
+    // $router->get('activation/student/{token}', 'AuthController@student_activation')->name('activation.student');
+// Route::get('/aktivasi/student/{token}', 'Auth\RegisterController@ActivationStudent')->name('activation.student');
+
 });  
+
+// $router->get('growth', 'ExampleController@index');

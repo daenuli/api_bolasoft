@@ -97,6 +97,11 @@ class PaymentController extends Controller
             if ($this->notification->transaction_status == 'pending') {
                 $order->payment_status = 1;
             } else if ($this->notification->transaction_status == 'capture' || $this->notification->transaction_status == 'settlement') {
+                
+                $user = auth()->user();
+                $user->confirmed = 'y';
+                $user->save();
+
                 $order->payment_status = 2;
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = 3;

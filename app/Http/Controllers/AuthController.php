@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Mail\Verification;
+use App\Mail\Information;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -35,16 +38,16 @@ class AuthController extends Controller
             // send session
             // Session::flash('info', 'Silahkan Aktivasi akun anda via <a href="https://www.gmail.com" target="_blank" class="badge badge-warning text-dark"> email </a>');
             // prepare send token
-            // $url = route('activation.student', ['token'=>encrypt($user->id)]);
+            $url = route('activation.student', ['token'=>encrypt($user->id)]);
             // $to = $req->email;
-            // $param = array(
-            //     'name'=>$user->name,
-            //     'email'=>$user->email,
-            //     'wa'=>$user->phone,
-            // );
+            $param = array(
+                'name' => $user->name,
+                'email' => $user->email,
+                'wa' => $user->wa_number,
+            );
 
-            // Mail::to($to)->send(new Verification($url));
-            // Mail::to('brata@bolasoft.id')->send(new Information($param));
+            Mail::to($request->email)->send(new Verification($url));
+            Mail::to('brata@bolasoft.id')->send(new Information($param));
             return response()->json([
                 'status' => 'success',
                 'message' => 'Silahkan cek email untuk aktivasi akun anda'
@@ -128,5 +131,16 @@ class AuthController extends Controller
     public function test()
     {
         return Str::random(32);
+    }
+
+    public function student_activation(Request $request){
+        $user = User::find(decrypt($request->token));
+        $user->is_active = 'y';
+        $user->save();
+        // return redirect()->route('home');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully activated'
+        ]);
     }
 }
