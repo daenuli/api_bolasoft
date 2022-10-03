@@ -98,9 +98,9 @@ class AboutController extends Controller
                 'place_of_birth' => 'required|string|min:3|max:255',
                 'address' => 'required|string|min:5|max:255',
                 'photo' => 'required|mimes:jpg,png',
-                'akta' => 'required',
-                'kartu_keluarga' => 'required',
-                'ijasah' => 'required',
+                'akta' => 'required|mimes:jpg,png',
+                'kartu_keluarga' => 'required|mimes:jpg,png',
+                'ijasah' => 'required|mimes:jpg,png',
             ]);
     
             if ($validator->fails()) {
@@ -157,22 +157,29 @@ class AboutController extends Controller
                     
                     // $this->compressImage($imageTemp, $destination_photo, 75);
 
-                    if ($this->compressImage($imageTemp, $destination_photo.$new_file_name_photo, 75)) {
+                    if ($this->compressImage($imageTemp, $destination_photo.$new_file_name_photo, 50)) {
                     // if ($request->file('photo')->move($destination_photo, $new_file_name_photo)) {
                         $data[0]['name'] = $file_name_photo;
                         $data[0]['path'] = '/upload/student/' . $new_file_name_photo;
                         $data[0]['status'] = 'pasphoto';
                         $data[0]['mime'] = $file_ext_photo;
+
+                        $student = Student::find($student->id);
+                        $student->thumbnail_image_file = '/upload/student/' . $new_file_name_photo;
+                        $student->save();
+
                     }
                 }
 
                 if ($request->hasFile('akta')) {
+                    $aktaTemp = $request->file('akta')->getPathName();
                     $file_name_akta = $request->file('akta')->getClientOriginalName();
                     $file_ext_akta = $request->file('akta')->getClientOriginalExtension();
 
                     $destination_akta = './upload/student/';
                     $new_file_name_akta = 'akta_' . time() . '.' .$file_ext_akta;
-                    if ($request->file('akta')->move($destination_akta, $new_file_name_akta)) {
+                    if ($this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50)) {
+                        // if ($request->file('akta')->move($destination_akta, $new_file_name_akta)) {
                         $data[1]['name'] = $file_name_akta;
                         $data[1]['path'] = '/upload/student/' . $new_file_name_akta;
                         $data[1]['status'] = 'akta_lahir';
@@ -181,12 +188,14 @@ class AboutController extends Controller
                 }
 
                 if ($request->hasFile('kartu_keluarga')) {
+                    $kkTemp = $request->file('kartu_keluarga')->getPathName();
                     $file_name_kk = $request->file('kartu_keluarga')->getClientOriginalName();
                     $file_ext_kk = $request->file('kartu_keluarga')->getClientOriginalExtension();
 
                     $destination_kk = './upload/student/';
                     $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .$file_ext_kk;
-                    if ($request->file('kartu_keluarga')->move($destination_kk, $new_file_name_kk)) {
+                    if ($this->compressImage($kkTemp, $destination_kk.$new_file_name_kk, 50)) {
+                        // if ($request->file('kartu_keluarga')->move($destination_kk, $new_file_name_kk)) {
                         $data[2]['name'] = $file_name_kk;
                         $data[2]['path'] = '/upload/student/' . $new_file_name_kk;
                         $data[2]['status'] = 'kartu_keluarga';
@@ -195,12 +204,14 @@ class AboutController extends Controller
                 }
 
                 if ($request->hasFile('ijasah')) {
+                    $ijazahTemp = $request->file('ijasah')->getPathName();
                     $file_name_ijazah = $request->file('ijasah')->getClientOriginalName();
                     $file_ext_ijazah = $request->file('ijasah')->getClientOriginalExtension();
 
                     $destination_ijazah = './upload/student/';
                     $new_file_name_ijazah = 'ijasah_' . time() . '.' .$file_ext_ijazah;
-                    if ($request->file('ijasah')->move($destination_ijazah, $new_file_name_ijazah)) {
+                    if ($this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50)) {
+                        // if ($request->file('ijasah')->move($destination_ijazah, $new_file_name_ijazah)) {
                         $data[3]['name'] = $file_name_ijazah;
                         $data[3]['path'] = '/upload/student/' . $new_file_name_ijazah;
                         $data[3]['status'] = 'ijasah';
@@ -222,7 +233,7 @@ class AboutController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'The profile was successfully updated'
+                    'message' => 'Profil berhasil diperbarui'
                 ]);
 
             }
@@ -256,7 +267,7 @@ class AboutController extends Controller
                 $destination_photo = './upload/student/';
                 $new_file_name_photo = 'pas_photo_' . time() . '.' .$file_ext_photo;
                 
-                if ($this->compressImage($imageTemp, $destination_photo.$new_file_name_photo, 75)) {
+                if ($this->compressImage($imageTemp, $destination_photo.$new_file_name_photo, 50)) {
                 // if ($request->file('photo')->move($destination_photo, $new_file_name_photo)) {
                     $sa = StudentAsset::where([
                         ['student_id', $student->id],
@@ -282,16 +293,22 @@ class AboutController extends Controller
                         $asset->mime = $file_ext_photo;
                         $asset->save();
                     }
+                    
+                    $student = Student::find($student->id);
+                    $student->thumbnail_image_file = '/upload/student/' . $new_file_name_photo;
+                    $student->save();
                 }
             }
 
             if ($request->hasFile('akta')) {
+                $aktaTemp = $request->file('akta')->getPathName();
                 $file_name_akta = $request->file('akta')->getClientOriginalName();
                 $file_ext_akta = $request->file('akta')->getClientOriginalExtension();
 
                 $destination_akta = './upload/student/';
                 $new_file_name_akta = 'akta_' . time() . '.' .$file_ext_akta;
-                if ($request->file('akta')->move($destination_akta, $new_file_name_akta)) {
+                if ($this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50)) {
+                    // if ($request->file('akta')->move($destination_akta, $new_file_name_akta)) {
                     $sa = StudentAsset::where([
                         ['student_id', $student->id],
                         ['status', 'akta_lahir'],
@@ -318,12 +335,14 @@ class AboutController extends Controller
             }
 
             if ($request->hasFile('kartu_keluarga')) {
+                $kkTemp = $request->file('kartu_keluarga')->getPathName();
                 $file_name_kk = $request->file('kartu_keluarga')->getClientOriginalName();
                 $file_ext_kk = $request->file('kartu_keluarga')->getClientOriginalExtension();
 
                 $destination_kk = './upload/student/';
                 $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .$file_ext_kk;
-                if ($request->file('kartu_keluarga')->move($destination_kk, $new_file_name_kk)) {
+                if ($this->compressImage($kkTemp, $destination_kk.$new_file_name_kk, 50)) {
+                    // if ($request->file('kartu_keluarga')->move($destination_kk, $new_file_name_kk)) {
                     $sa = StudentAsset::where([
                         ['student_id', $student->id],
                         ['status', 'kartu_keluarga'],
@@ -350,12 +369,14 @@ class AboutController extends Controller
             }
 
             if ($request->hasFile('ijasah')) {
+                $ijazahTemp = $request->file('ijasah')->getPathName();
                 $file_name_ijazah = $request->file('ijasah')->getClientOriginalName();
                 $file_ext_ijazah = $request->file('ijasah')->getClientOriginalExtension();
 
                 $destination_ijazah = './upload/student/';
                 $new_file_name_ijazah = 'ijasah_' . time() . '.' .$file_ext_ijazah;
-                if ($request->file('ijasah')->move($destination_ijazah, $new_file_name_ijazah)) {
+                if ($this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50)) {
+                    // if ($request->file('ijasah')->move($destination_ijazah, $new_file_name_ijazah)) {
                     $sa = StudentAsset::where([
                         ['student_id', $student->id],
                         ['status', 'ijasah'],
@@ -383,7 +404,7 @@ class AboutController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'The profile was successfully updated'
+                'message' => 'Profil berhasil diperbarui'
             ]);
         }
     }
