@@ -21,7 +21,7 @@ class KelasController extends Controller
         } else {
             return response()->json([
                 'status' => 'error',
-                'message' => 'club_id field is required'
+                'message' => 'club_id wajib diisi'
                 // 'message' => 'Please select the club (ssb) before choose class(kelas)'
             ]);
         }

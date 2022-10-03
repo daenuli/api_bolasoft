@@ -69,7 +69,7 @@ class AuthController extends Controller
         if (empty($request->email) or empty($request->password)) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'You must fill all the fields'
+                'message' => 'Semua field wajib diisi'
             ]);
         }
 
@@ -94,7 +94,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'error',
-            'message' => 'Successfully logged out'
+            'message' => 'Anda berhasil melakukan logout'
         ]);
     }
 
@@ -140,7 +140,7 @@ class AuthController extends Controller
         // return redirect()->route('home');
         return response()->json([
             'status' => 'success',
-            'message' => 'Successfully activated'
+            'message' => 'Aktivasi akun berhasil'
         ]);
     }
 }

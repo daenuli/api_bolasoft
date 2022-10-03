@@ -41,38 +41,47 @@ class ClubController extends Controller
         if (!empty($request->class_id)) {
             // if (!empty($request->club_id)) {
             $student = auth()->user()->student;
+            // $payment = auth()->user()->order;
 
-            if (isset($student)) {
-                $user_auth = auth()->user();
-                $kelas = Classes::find($request->class_id);
+            // if (!empty($payment) && $payment->payment_status == 2) {
+                if (isset($student)) {
+                    $user_auth = auth()->user();
+                    $kelas = Classes::find($request->class_id);
 
-                $club = Club::find($kelas->club_id);
-                // $club = Club::find($request->club_id);
-                $user = User::find($user_auth->id)->update([
-                    'club_id' => $kelas->club_id,
-                    // 'club_id' => $request->club_id,
-                    'paguyuban_id' => $club->paguyuban_id,
-                ]);
+                    $club = Club::find($kelas->club_id);
+                    // $club = Club::find($request->club_id);
+                    $user = User::find($user_auth->id)->update([
+                        'club_id' => $kelas->club_id,
+                        // 'club_id' => $request->club_id,
+                        'paguyuban_id' => $club->paguyuban_id,
+                    ]);
 
-                $student = Student::find($user_auth->detail_id);
-                $student->club_id = $kelas->club_id;
-                $student->class_id = $request->class_id;
-                $student->save();
+                    $student = Student::find($user_auth->detail_id);
+                    $student->club_id = $kelas->club_id;
+                    $student->class_id = $request->class_id;
+                    $student->save();
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'The class was successfully updated'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Please complete the profile first'
-                ]);
-            }
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Kelas berhasil dipilih'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Silahkan lengkapi profile terlebih dahulu'
+                    ]);
+                }
+            // } else {
+            //     return response()->json([
+            //         'status' => 'error',
+            //         'message' => 'Silahkan lakukan pembayaran terlebih dahulu'
+            //     ]);
+            // }
+
         } else {
             return response()->json([
                 'status' => 'error',
-                'message' => 'class_id field is required'
+                'message' => 'class_id wajib diisi'
             ]);
         }
     }

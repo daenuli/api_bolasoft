@@ -20,6 +20,8 @@ class AboutController extends Controller
         // return response()->json($student);
         $user = auth()->user();
         $student = auth()->user()->student;
+        $payment = auth()->user()->order;
+
         $data = [
             'id' => $user->id,
             'name' => $user->name,
@@ -31,7 +33,8 @@ class AboutController extends Controller
             'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : null,
             'thumbnail_image' => isset($student) ? $student->thumbnail_image : null,
             'ssb_name' => isset($user->club) ? $user->club->name : '-',
-            'is_complete' =>isset($student) ? true : false
+            'is_complete' =>isset($student) ? true : false,
+            'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
         ];
         return response()->json($data);
     }
@@ -40,6 +43,7 @@ class AboutController extends Controller
     {
         $user = auth()->user();
         $detail = auth()->user()->student;
+        $payment = auth()->user()->order;
 
         $data = [
             'id' => $user->id,
@@ -60,7 +64,8 @@ class AboutController extends Controller
             'class_id' => isset($detail) ? $detail->class_id : '',
             'class_name' => isset($detail) ? $detail->classes->name_class : '',
             'ssb_name' => isset($user->club) ? $user->club->name : '-',
-            'is_complete' => isset($detail) ? true : false
+            'is_complete' => isset($detail) ? true : false,
+            'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
         ];
         // $user = auth()->user();
         return response()->json($data);
