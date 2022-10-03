@@ -165,7 +165,7 @@ class AboutController extends Controller
                         $data[0]['mime'] = $file_ext_photo;
 
                         $student = Student::find($student->id);
-                        $student->thumbnail_image_file = '/upload/student/' . $new_file_name_photo;
+                        $student->thumbnail_image_path = '/upload/student/' . $new_file_name_photo;
                         $student->save();
 
                     }
@@ -295,7 +295,7 @@ class AboutController extends Controller
                     }
                     
                     $student = Student::find($student->id);
-                    $student->thumbnail_image_file = '/upload/student/' . $new_file_name_photo;
+                    $student->thumbnail_image_path = '/upload/student/' . $new_file_name_photo;
                     $student->save();
                 }
             }
@@ -433,11 +433,11 @@ class AboutController extends Controller
         return $destination; 
     }
 
-    public function convert_filesize($bytes, $decimals = 2) { 
-        $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB'); 
-        $factor = floor((strlen($bytes) - 1) / 3); 
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor]; 
-    }
+    // public function convert_filesize($bytes, $decimals = 2) { 
+    //     $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB'); 
+    //     $factor = floor((strlen($bytes) - 1) / 3); 
+    //     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor]; 
+    // }
 
     // public function update_photo(Request $request)
     // {
