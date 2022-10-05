@@ -10,6 +10,7 @@
         "intervention/image": "^2.7",
         "laravel/lumen-framework": "^9.0",
         "midtrans/midtrans-php": "^2.5",
+        "spatie/pdf-to-image": "^2.2",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

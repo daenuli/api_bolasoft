@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
+use Laravel\Lumen\Routing\UrlGenerator;
 
 class AboutController extends Controller
 {
@@ -31,7 +32,7 @@ class AboutController extends Controller
             'email_confirmed' => $user->is_active,
             'date_of_birth' => isset($student) ? $student->date_of_birth : null,
             'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : null,
-            'thumbnail_image' => isset($student) ? $student->thumbnail_image : null,
+            'thumbnail_image' => isset($student) ? url($student->thumbnail_image_path) : null,
             'ssb_name' => isset($user->club) ? $user->club->name : '-',
             'is_complete' =>isset($student) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
@@ -275,7 +276,7 @@ class AboutController extends Controller
                     ])->first();
 
                     if (!empty($sa)) {
-                        if (file_exists('.'.$sa->path)) {
+                        if (!empty($sa->path) && file_exists('.'.$sa->path)) {
                             unlink('.'.$sa->path);
                         }
                         
@@ -314,7 +315,7 @@ class AboutController extends Controller
                         ['status', 'akta_lahir'],
                     ])->first();
                     if (!empty($sa)) {
-                        if (file_exists('.'.$sa->path)) {
+                        if (!empty($sa->path) && file_exists('.'.$sa->path)) {
                             unlink('.'.$sa->path);
                         }
                         $sa->name = $file_name_akta;
@@ -348,7 +349,7 @@ class AboutController extends Controller
                         ['status', 'kartu_keluarga'],
                     ])->first();
                     if (!empty($sa)) {
-                        if (file_exists('.'.$sa->path)) {
+                        if (!empty($sa->path) && file_exists('.'.$sa->path)) {
                             unlink('.'.$sa->path);
                         }
                         $sa->name = $file_name_kk;
@@ -382,7 +383,7 @@ class AboutController extends Controller
                         ['status', 'ijasah'],
                     ])->first();
                     if (!empty($sa)) {
-                        if (file_exists('.'.$sa->path)) {
+                        if (!empty($sa->path) && file_exists('.'.$sa->path)) {
                             unlink('.'.$sa->path);
                         }
                         $sa->name = $file_name_ijazah;
