@@ -16,7 +16,7 @@ class ClubController extends Controller
         $paguyuban_name = $request->paguyuban_name;
         $data = Club::leftJoin('paguyubans', 'clubs.paguyuban_id', '=', 'paguyubans.id')
                 ->leftJoin('provinces', 'paguyubans.province_id', '=', 'provinces.id_propinsi')
-                ->select('clubs.id', 'provinces.nama_propinsi as province_name', 'paguyubans.name as paguyuban_name', 'clubs.name as club_name', 'clubs.telp', 'clubs.address', 'clubs.number_of_student')
+                ->select('clubs.id', 'provinces.nama_propinsi as province_name', 'paguyubans.name as paguyuban_name', 'clubs.name as club_name', 'clubs.telp', 'clubs.address', 'clubs.number_of_student', 'clubs.thumbnail_image_path')
                 ->when($club_name, function ($query, $club_name) {
                     $query->where('clubs.name', 'like', '%'.$club_name.'%');
                 })
@@ -34,6 +34,29 @@ class ClubController extends Controller
     {
         $data = Club::find($id);
 
+        $images = [
+            [
+                'id' => 1,
+                'image_path' => 'https://www.ertheo.com/sites/default/files/campamento_manu.jpg',
+            ],
+            [
+                'id' => 2,
+                'image_path' => 'https://www.insideworldfootball.com/app/uploads/2011/12/Utd.jpg',
+            ],
+            [
+                'id' => 3,
+                'image_path' => 'https://i2-prod.manchestereveningnews.co.uk/incoming/article16736720.ece/ALTERNATES/s1200b/0_GettyImages-1135527573.jpg',
+            ],
+            [
+                'id' => 4,
+                'image_path' => 'https://i2-prod.manchestereveningnews.co.uk/incoming/article14371300.ece/ALTERNATES/s1200/GettyImages-888909452.jpg',
+            ],
+            [
+                'id' => 5,
+                'image_path' => 'https://i2-prod.manchestereveningnews.co.uk/incoming/article16988671.ece/ALTERNATES/s615/0_GettyImages-1171118731.jpg',
+            ]
+        ];
+
         $club = [
             'id' => $data->id,
             'name' => $data->name,
@@ -46,6 +69,7 @@ class ClubController extends Controller
             // 'thumbnail_image' => url($data->thumbnail_image),
             'number_of_student' => $data->number_of_student,
             'is_premium' => $data->is_premium,
+            'images' => $images
         ];
         return response()->json($club);
     }
