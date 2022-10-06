@@ -33,7 +33,19 @@ class ClubController extends Controller
     public function show($id)
     {
         $data = Club::find($id);
-        return response()->json($data);
+
+        $club = [
+            'id' => $data->id,
+            'name' => $data->name,
+            'telp' => $data->telp,
+            'address' => $data->address,
+            'description' => $data->desc,
+            'thumbnail_image' => $data->thumbnail_image_path,
+            // 'thumbnail_image' => url($data->thumbnail_image),
+            'number_of_student' => $data->number_of_student,
+            'is_premium' => $data->is_premium,
+        ];
+        return response()->json($club);
     }
 
     public function update(Request $request)
