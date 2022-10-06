@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
 use Laravel\Lumen\Routing\UrlGenerator;
+use Spatie\PdfToImage\Pdf;
 
 class AboutController extends Controller
 {
@@ -62,8 +63,8 @@ class AboutController extends Controller
             'weight' => isset($detail) ? $detail->weight : '',
             'height' => isset($detail) ? $detail->height : '',
             'parent_name' => isset($detail) ? $detail->parent_name : '',
-            'class_id' => isset($detail) ? $detail->class_id : '',
-            'class_name' => isset($detail) ? $detail->classes->name_class : '',
+            // 'class_id' => isset($detail) ? $detail->class_id : '',
+            // 'class_name' => isset($detail) ? $detail->classes->name_class : '',
             'ssb_name' => isset($user->club) ? $user->club->name : '-',
             'is_complete' => isset($detail) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
@@ -305,6 +306,9 @@ class AboutController extends Controller
                 $aktaTemp = $request->file('akta')->getPathName();
                 $file_name_akta = $request->file('akta')->getClientOriginalName();
                 $file_ext_akta = $request->file('akta')->getClientOriginalExtension();
+
+                $pdf = new Pdf($aktaTemp);
+                $pdf->saveImage('./upload/');
 
                 $destination_akta = './upload/student/';
                 $new_file_name_akta = 'akta_' . time() . '.' .$file_ext_akta;
