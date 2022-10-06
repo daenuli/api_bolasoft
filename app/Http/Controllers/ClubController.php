@@ -41,6 +41,8 @@ class ClubController extends Controller
             'address' => $data->address,
             'description' => $data->desc,
             'thumbnail_image' => $data->thumbnail_image_path,
+            'coach' => '3 pelatih',
+            'association' => 'Terdaftar di 3 Asosiasi/Paguyuban',
             // 'thumbnail_image' => url($data->thumbnail_image),
             'number_of_student' => $data->number_of_student,
             'is_premium' => $data->is_premium,
