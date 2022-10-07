@@ -179,7 +179,7 @@ class AboutController extends Controller
                     $file_ext_akta = $request->file('akta')->getClientOriginalExtension();
 
                     $destination_akta = './upload/student/';
-                    $new_file_name_akta = 'akta_' . time() . '.' .((strtolower($file_ext_akta)=='pdf') ? 'pdf' : $file_ext_akta);
+                    $new_file_name_akta = 'akta_' . time() . '.' .((strtolower($file_ext_akta)=='pdf') ? 'jpg' : $file_ext_akta);
                     
                     if (strtolower($file_ext_akta) == 'pdf') {
                         $pdf = new Pdf($aktaTemp);
@@ -203,7 +203,7 @@ class AboutController extends Controller
 
                     $destination_kk = './upload/student/';
                     // $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .$file_ext_kk;
-                    $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .((strtolower($file_ext_kk) == 'pdf') ? 'pdf' : $file_ext_kk);
+                    $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .((strtolower($file_ext_kk) == 'pdf') ? 'jpg' : $file_ext_kk);
 
                     if (strtolower($file_ext_kk) == 'pdf') {
                         $pdf = new Pdf($kkTemp);
@@ -227,7 +227,7 @@ class AboutController extends Controller
                     $file_ext_ijazah = $request->file('ijasah')->getClientOriginalExtension();
 
                     $destination_ijazah = './upload/student/';
-                    $new_file_name_ijazah = 'ijasah_' . time() . '.' .((strtolower($file_ext_ijazah) == 'pdf') ? 'pdf' : $file_ext_ijazah);
+                    $new_file_name_ijazah = 'ijasah_' . time() . '.' .((strtolower($file_ext_ijazah) == 'pdf') ? 'jpg' : $file_ext_ijazah);
                     
                     if (strtolower($file_ext_ijazah) == 'pdf') {
                         $pdf = new Pdf($ijazahTemp);
@@ -332,7 +332,7 @@ class AboutController extends Controller
                 $file_ext_akta = $request->file('akta')->getClientOriginalExtension();
 
                 $destination_akta = './upload/student/';
-                $new_file_name_akta = 'akta_' . time() . '.' .((strtolower($file_ext_akta)=='pdf') ? 'pdf' : $file_ext_akta);
+                $new_file_name_akta = 'akta_' . time() . '.' .((strtolower($file_ext_akta)=='pdf') ? 'jpg' : $file_ext_akta);
 
                 if (strtolower($file_ext_akta) == 'pdf') {
                     $pdf = new Pdf($aktaTemp);
@@ -375,7 +375,7 @@ class AboutController extends Controller
 
                 $destination_kk = './upload/student/';
                 // $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .$file_ext_kk;
-                $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .((strtolower($file_ext_kk) == 'pdf') ? 'pdf' : $file_ext_kk);
+                $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .((strtolower($file_ext_kk) == 'pdf') ? 'jpg' : $file_ext_kk);
 
                 if (strtolower($file_ext_kk) == 'pdf') {
                     $pdf = new Pdf($kkTemp);
@@ -416,7 +416,7 @@ class AboutController extends Controller
                 $file_ext_ijazah = $request->file('ijasah')->getClientOriginalExtension();
 
                 $destination_ijazah = './upload/student/';
-                $new_file_name_ijazah = 'ijasah_' . time() . '.' .((strtolower($file_ext_ijazah) == 'pdf') ? 'pdf' : $file_ext_ijazah);
+                $new_file_name_ijazah = 'ijasah_' . time() . '.' .((strtolower($file_ext_ijazah) == 'pdf') ? 'jpg' : $file_ext_ijazah);
                 // $new_file_name_ijazah = 'ijasah_' . time() . '.' .$file_ext_ijazah;
                 if (strtolower($file_ext_ijazah) == 'pdf') {
                     $pdf = new Pdf($ijazahTemp);
