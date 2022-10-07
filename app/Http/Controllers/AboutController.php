@@ -100,9 +100,9 @@ class AboutController extends Controller
                 'place_of_birth' => 'required|string|min:3|max:255',
                 'address' => 'required|string|min:5|max:255',
                 'photo' => 'required|mimes:jpg,png',
-                'akta' => 'required|mimes:jpg,png',
-                'kartu_keluarga' => 'required|mimes:jpg,png',
-                'ijasah' => 'required|mimes:jpg,png',
+                'akta' => 'required|mimes:jpg,png,pdf',
+                'kartu_keluarga' => 'required|mimes:jpg,png,pdf',
+                'ijasah' => 'required|mimes:jpg,png,pdf',
             ]);
     
             if ($validator->fails()) {
