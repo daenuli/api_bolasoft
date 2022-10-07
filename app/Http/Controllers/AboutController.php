@@ -420,7 +420,7 @@ class AboutController extends Controller
                 // $new_file_name_ijazah = 'ijasah_' . time() . '.' .$file_ext_ijazah;
                 if (strtolower($file_ext_ijazah) == 'pdf') {
                     $pdf = new Pdf($ijazahTemp);
-                    $pdf->saveImage($destination_ijazah.'kartu_keluarga_' . time() . '.jpg');
+                    $pdf->saveImage($destination_ijazah.'ijasah_' . time() . '.jpg');
                 } else {
                     $this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50);
                 }
