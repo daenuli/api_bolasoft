@@ -310,6 +310,8 @@ class AboutController extends Controller
                 $pdf = new Pdf($aktaTemp);
                 $pdf->saveImage('./upload/akta_' . time() . '.jpg');
 
+                dd($pdf);
+                
                 $destination_akta = './upload/student/';
                 $new_file_name_akta = 'akta_' . time() . '.' .$file_ext_akta;
                 if ($this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50)) {
