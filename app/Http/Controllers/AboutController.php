@@ -242,7 +242,7 @@ class AboutController extends Controller
                         $data[3]['path'] = '/upload/student/' . $new_file_name_ijazah;
                         $data[3]['status'] = 'ijasah';
                         $data[3]['mime'] = $file_ext_ijazah;
-                    }
+                    // }
                 }
 
                 foreach ($data as $key => $value) {
