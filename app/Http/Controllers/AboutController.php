@@ -307,9 +307,8 @@ class AboutController extends Controller
                 $file_name_akta = $request->file('akta')->getClientOriginalName();
                 $file_ext_akta = $request->file('akta')->getClientOriginalExtension();
 
-                $pdf = new Pdf('./upload/Invoice-14164-INV-HERZA-08-2022.pdf');
-                // $pdf = new Pdf($aktaTemp);
-                $pdf->saveImage('/var/www/html/api_bolasoft/public/upload/hello.jpg');
+                $pdf = new Pdf($aktaTemp);
+                $pdf->saveImage('./upload/'.$file_name_akta.'.'.$file_ext_akta);
 
                 $destination_akta = './upload/student/';
                 $new_file_name_akta = 'akta_' . time() . '.' .$file_ext_akta;
