@@ -21,4 +21,14 @@ class Club extends Model
         return $this->hasMany(User::class);
     }
 
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function coach()
+    {
+        return $this->hasMany(ClubCoach::class, 'club_id');
+    }
+
 }

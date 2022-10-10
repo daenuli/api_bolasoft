@@ -33,7 +33,7 @@ class AboutController extends Controller
             'email_confirmed' => $user->is_active,
             'date_of_birth' => isset($student) ? $student->date_of_birth : null,
             'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : null,
-            'thumbnail_image' => isset($student) ? url($student->thumbnail_image_path) : null,
+            'thumbnail_image' => isset($student) ? config('app.bolasoft_url').$student->thumbnail_image_path : null,
             'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' =>isset($student) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false

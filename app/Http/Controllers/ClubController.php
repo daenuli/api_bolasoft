@@ -62,14 +62,22 @@ class ClubController extends Controller
             'name' => $data->name,
             'telp' => $data->telp,
             'address' => $data->address,
-            'description' => $data->desc,
-            'thumbnail_image' => $data->thumbnail_image_path,
-            'coach' => '3 pelatih',
+            'description' => ($data->desc) ? $data->desc : '',
+            'thumbnail_image' => config('app.bolasoft_url').$data->thumbnail_image_path,
+            'coach' => $data->coach->count() . ' pelatih',
+            // 'coach' => '3 pelatih',
             'association' => 'Terdaftar di 3 Asosiasi/Paguyuban',
             // 'thumbnail_image' => url($data->thumbnail_image),
             'number_of_student' => $data->number_of_student,
             'is_premium' => $data->is_premium,
-            'images' => $images
+            // 'images' => $images
+            'images' => $data->events->map(function ($item, $key) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'image_path' => config('app.bolasoft_url').$item->image_path,
+                ];
+            })
         ];
         return response()->json($club);
     }
