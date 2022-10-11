@@ -27,7 +27,8 @@ class AuthController extends Controller
             $user = new User();
             $user->club_id = 0;
             $user->paguyuban_id = 0;
-            $user->detail_id = 0;
+            $user->detail_id = NULL;
+            // $user->detail_id = 0;
             $user->name = $request->name;
             $user->email = $request->email;
             $user->wa_number = $request->phone;
