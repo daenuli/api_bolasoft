@@ -62,6 +62,8 @@ class ClubController extends Controller
             'name' => $data->name,
             'telp' => $data->telp,
             'address' => $data->address,
+            'latitude' => $data->latitude,
+            'longitude' => $data->longitude,
             'description' => ($data->desc) ? $data->desc : '',
             'thumbnail_image' => config('app.bolasoft_url').$data->thumbnail_image_path,
             'coach' => $data->coach->count() . ' pelatih',
