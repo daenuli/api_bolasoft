@@ -92,7 +92,7 @@ class AboutController extends Controller
         if ($user->detail_id == 0 || $user->detail_id == NULL) {
 
             $validator = Validator::make($request->all(), [
-                'nik' => 'required|string|min:3|unique:students',
+                'nik' => 'required|string|min:3|unique:students,nik',
                 'name' => 'required|string|min:3|max:255',
                 'nick_name' => 'required|string|min:3|max:50',
                 // 'class_id' => 'required',
