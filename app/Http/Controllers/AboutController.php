@@ -89,7 +89,8 @@ class AboutController extends Controller
         // return $img->filesize();
         
         $user = auth()->user();
-        if ($user->detail_id == 0 || $user->detail_id == NULL) {
+        if ($user->detail_id == 0) {
+            // if ($user->detail_id == 0 || $user->detail_id == NULL) {
 
             $validator = Validator::make($request->all(), [
                 'nik' => 'required|string|min:3|unique:students,nik',

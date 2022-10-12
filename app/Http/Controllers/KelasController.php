@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Classes;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 class KelasController extends Controller
 {
@@ -15,9 +17,26 @@ class KelasController extends Controller
     {
         // $user = auth()->user();
         // if ($user->club_id > 0) {
+        $student = auth()->user()->student;
         if (!empty($request->club_id)) {
-            $kelas = Classes::where('club_id', $request->club_id)->select('id', 'club_id', 'name_class')->get();
-            return response()->json($kelas);
+            $age = Carbon::parse($student->date_of_birth)->age;
+            $kelas = Classes::with('class_category')->where('club_id', $request->club_id)
+                    ->whereHas('class_category', function (Builder $query) use ($age) {
+                        $query->where('age', '<=', $age);
+                    })
+                    // ->where('class_category')
+                    // ->select('id', 'club_id', 'name_class')
+                    // ->select('id', 'club_id', 'name_class')
+                    ->get();
+            $data = collect($kelas)->map(function ($item, $key) {
+                        return [
+                            'id' => $item->id,
+                            'club_id' => $item->club_id,
+                            'name_class' => $item->class_category->name,
+                            'description' => $item->name_class
+                        ];
+                    });
+            return response()->json($data);
         } else {
             return response()->json([
                 'status' => 'error',
