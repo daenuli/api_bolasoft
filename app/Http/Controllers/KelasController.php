@@ -20,7 +20,9 @@ class KelasController extends Controller
         $student = auth()->user()->student;
         if (!empty($request->club_id)) {
             $age = Carbon::parse($student->date_of_birth)->age;
-            $kelas = Classes::with('class_category')->where('club_id', $request->club_id)
+            $kelas = Classes::with('class_category')
+                    ->where('status', 1)
+                    ->where('club_id', $request->club_id)
                     ->whereHas('class_category', function (Builder $query) use ($age) {
                         $query->where('age', '<=', $age);
                     })
