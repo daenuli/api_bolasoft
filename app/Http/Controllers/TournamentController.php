@@ -15,6 +15,8 @@ class TournamentController extends Controller
     {
         $user = auth()->user();
 
+        $status = $request->status;
+
         $competition = CompetitionDsp::whereHas('player', function (Builder $query) use ($user) {
             $query->where('student_id', $user->detail_id);
         })
@@ -26,6 +28,11 @@ class TournamentController extends Controller
         //         $qry->whereIn('status', [5, 6]);
         //     });
         // })
+        ->when($status, function ($query, $status) {
+            return $query->whereHas('match', function (Builder $query) use ($status) {
+                $query->where('is_finished', $status);
+            });
+        })
         ->get();
 
         $data = $competition->map(function ($item, $key) {
