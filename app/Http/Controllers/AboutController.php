@@ -52,7 +52,7 @@ class AboutController extends Controller
             'role' => $user->role,
             'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
-            'thumbnail_image' => isset($detail->thumbnail_image_path) ? config('app.bolasoft_url').$detail->thumbnail_image_path : '',
+            'thumbnail_image' => isset($detail->thumbnail_image_path) ? config('app.bolasoft_url').$detail->thumbnail_image_path : null,
             'nik' => isset($detail) ? $detail->nik : '',
             'nick_name' => isset($detail) ? $detail->nick_name : '',
             'address' => isset($detail) ? $detail->address : '',
