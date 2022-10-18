@@ -16,10 +16,6 @@ class AboutController extends Controller
 {
     public function index()
     {
-        // return response()->json(auth()->user()->student);
-        // $student = User::leftJoin('students', 'students.id', '=', 'users.detail_id')
-        //             ->select('users.id', 'users.name', 'users.email', 'users.wa_number', 'users.is_active');
-        // return response()->json($student);
         $user = auth()->user();
         $student = auth()->user()->student;
         $payment = auth()->user()->order;
@@ -29,11 +25,11 @@ class AboutController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'wa_number' => (int) $user->wa_number,
-            'ssb_confirmed' => $user->confirmed,
-            'email_confirmed' => $user->is_active,
-            'date_of_birth' => isset($student) ? $student->date_of_birth : null,
-            'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : null,
-            'thumbnail_image' => isset($student) ? config('app.bolasoft_url').$student->thumbnail_image_path : null,
+            'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
+            'email_confirmed' => ($user->is_active == 'y') ? true : false,
+            'date_of_birth' => isset($student) ? $student->date_of_birth : '',
+            'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : '',
+            'thumbnail_image' => isset($student) ? config('app.bolasoft_url').$student->thumbnail_image_path : '',
             'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' =>isset($student) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
@@ -46,6 +42,7 @@ class AboutController extends Controller
         $user = auth()->user();
         $detail = auth()->user()->student;
         $payment = auth()->user()->order;
+        $student_class = auth()->user()->student_class;
 
         $data = [
             'id' => $user->id,
@@ -53,23 +50,27 @@ class AboutController extends Controller
             'email' => $user->email,
             'wa_number' => $user->wa_number,
             'role' => $user->role,
-            'ssb_confirmed' => $user->confirmed,
-            'email_confirmed' => $user->is_active,
+            'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
+            'email_confirmed' => ($user->is_active == 'y') ? true : false,
+            'thumbnail_image' => isset($detail->thumbnail_image_path) ? config('app.bolasoft_url').$detail->thumbnail_image_path : '',
             'nik' => isset($detail) ? $detail->nik : '',
             'nick_name' => isset($detail) ? $detail->nick_name : '',
             'address' => isset($detail) ? $detail->address : '',
             'place_of_birth' => isset($detail) ? $detail->place_of_birth : '',
             'date_of_birth' => isset($detail) ? $detail->date_of_birth : '',
-            'weight' => isset($detail) ? $detail->weight : '',
-            'height' => isset($detail) ? $detail->height : '',
+            'age' => isset($detail) ? Carbon::parse($detail->date_of_birth)->age : '',
+            'weight' => isset($detail) ? (int) $detail->weight : '',
+            'height' => isset($detail) ? (int) $detail->height : '',
             'parent_name' => isset($detail) ? $detail->parent_name : '',
             // 'class_id' => isset($detail) ? $detail->class_id : '',
             // 'class_name' => isset($detail) ? $detail->classes->name_class : '',
-            'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
+            'ssb_name' => isset($student_class) ? $student_class->club->name : '',
+            // 'ssb_name' => isset($student_class) && ($user->confirmed == 'y') ? $student_class->club->name : '',
+            // 'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' => isset($detail) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
         ];
-        // $user = auth()->user();
+        // $user = auth()->user();student_class
         return response()->json($data);
     }
 
@@ -100,10 +101,10 @@ class AboutController extends Controller
                 'date_of_birth' => 'required|date',
                 'place_of_birth' => 'required|string|min:3|max:255',
                 'address' => 'required|string|min:5|max:255',
-                'photo' => 'required|mimes:jpg,png',
-                'akta' => 'required|mimes:jpg,png,pdf',
-                'kartu_keluarga' => 'required|mimes:jpg,png,pdf',
-                'ijasah' => 'required|mimes:jpg,png,pdf',
+                'photo' => 'mimes:jpg,png',
+                'akta' => 'mimes:jpg,png,pdf',
+                'kartu_keluarga' => 'mimes:jpg,png,pdf',
+                'ijasah' => 'mimes:jpg,png,pdf',
             ]);
     
             if ($validator->fails()) {
@@ -139,7 +140,7 @@ class AboutController extends Controller
                 $student->date_of_birth = $request->date_of_birth;
                 $student->weight = ($request->weight) ? $request->weight : 0;
                 $student->height = ($request->height) ? $request->height : 0;
-                $student->parent_name = ($request->parent_name) ? $request->height : null;
+                $student->parent_name = ($request->parent_name) ? $request->parent_name : null;
                 $student->save();
 
                 $user->detail_id = $student->id;
@@ -246,16 +247,18 @@ class AboutController extends Controller
                     // }
                 }
 
-                foreach ($data as $key => $value) {
+                if (isset($data)) {
+                    foreach ($data as $key => $value) {
 
-                    $student_asset = new StudentAsset;
-                    $student_asset->student_id = $student->id;
-                    $student_asset->name = $value['name'];
-                    $student_asset->mime = $value['mime'];
-                    $student_asset->status = $value['status'];
-                    $student_asset->path = $value['path'];
-                    $student_asset->save();
+                        $student_asset = new StudentAsset;
+                        $student_asset->student_id = $student->id;
+                        $student_asset->name = $value['name'];
+                        $student_asset->mime = $value['mime'];
+                        $student_asset->status = $value['status'];
+                        $student_asset->path = $value['path'];
+                        $student_asset->save();
 
+                    }
                 }
 
                 return response()->json([
@@ -266,6 +269,25 @@ class AboutController extends Controller
             }
 
         } else {
+
+            $validator = Validator::make($request->all(), [
+                'nik' => 'required|string|min:3|unique:students,nik,'.$user->detail_id,
+                'name' => 'required|string|min:3|max:255',
+                'nick_name' => 'required|string|min:3|max:50',
+                // 'class_id' => 'required',
+                'date_of_birth' => 'required|date',
+                'place_of_birth' => 'required|string|min:3|max:255',
+                'address' => 'required|string|min:5|max:255',
+                'photo' => 'mimes:jpg,png',
+                'akta' => 'mimes:jpg,png,pdf',
+                'kartu_keluarga' => 'mimes:jpg,png,pdf',
+                'ijasah' => 'mimes:jpg,png,pdf',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 422);
+            }
+
             $student = Student::find($user->detail_id);
             // $student->class_id = ($request->class_id) ? $request->class_id : $student->class_id;
             $student->nik = ($request->nik) ? $request->nik : $student->nik;

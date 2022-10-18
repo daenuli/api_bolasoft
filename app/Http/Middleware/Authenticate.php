@@ -42,7 +42,10 @@ class Authenticate
             //         'message' => 'Unauthorized.'
             //     ]
             // ], 401);
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized'
+            ], 401);
             // return response('Unauthorized.', 401);
         }
 

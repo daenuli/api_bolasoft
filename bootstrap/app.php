@@ -81,6 +81,8 @@ $app->configure('mail');
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'checkPayment' => App\Http\Middleware\CheckPayment::class,
+    'checkKelas' => App\Http\Middleware\CheckKelas::class,
 ]);
 
 // $app->register(Laravel\Passport\PassportServiceProvider::class);

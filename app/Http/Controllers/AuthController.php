@@ -48,7 +48,7 @@ class AuthController extends Controller
             );
 
             Mail::to($request->email)->send(new Verification($url));
-            Mail::to('brata@bolasoft.id')->send(new Information($param));
+            // Mail::to('brata@bolasoft.id')->send(new Information($param));
             return response()->json([
                 'status' => 'success',
                 'message' => 'Silahkan cek email untuk aktivasi akun anda'
@@ -81,6 +81,18 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Email/Password anda salah'
+            ], 401);
+        }
+
+        $user = auth()->user();
+        if ($user->is_active == 'n') {
+            auth()->logout();
+            // auth()->refresh();
+            // auth()->invalidate();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Silahkan aktivasi akun melalui link yang kami kirimkan lewat email anda'
             ], 401);
         }
 

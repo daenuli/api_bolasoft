@@ -24,7 +24,7 @@ class KelasController extends Controller
                     ->where('status', 1)
                     ->where('club_id', $request->club_id)
                     ->whereHas('class_category', function (Builder $query) use ($age) {
-                        $query->where('age', '<=', $age);
+                        $query->where('age', '>=', $age);
                     })
                     // ->where('class_category')
                     // ->select('id', 'club_id', 'name_class')

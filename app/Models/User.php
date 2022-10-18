@@ -66,5 +66,11 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         return $this->hasOne(Order::class);
     }
 
+    public function student_class()
+    {
+        return $this->hasOne(StudentClass::class, 'student_id', 'detail_id')->where('status', 1);
+        // return $this->hasOne(StudentClass::class, 'detail_id', 'student_id')->where('status', 1);
+    }
+
 
 }

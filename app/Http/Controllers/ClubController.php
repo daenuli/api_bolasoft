@@ -6,11 +6,14 @@ use App\Models\Student;
 use App\Models\Classes;
 use App\Models\Club;
 use App\Models\User;
+use App\Models\StudentClass;
 
 class ClubController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
+
         $club_name = $request->club_name;
         $province_name = $request->province_name;
         $paguyuban_name = $request->paguyuban_name;
@@ -34,29 +37,6 @@ class ClubController extends Controller
     {
         $data = Club::find($id);
 
-        $images = [
-            [
-                'id' => 1,
-                'image_path' => 'https://www.ertheo.com/sites/default/files/campamento_manu.jpg',
-            ],
-            [
-                'id' => 2,
-                'image_path' => 'https://www.insideworldfootball.com/app/uploads/2011/12/Utd.jpg',
-            ],
-            [
-                'id' => 3,
-                'image_path' => 'https://i2-prod.manchestereveningnews.co.uk/incoming/article16736720.ece/ALTERNATES/s1200b/0_GettyImages-1135527573.jpg',
-            ],
-            [
-                'id' => 4,
-                'image_path' => 'https://i2-prod.manchestereveningnews.co.uk/incoming/article14371300.ece/ALTERNATES/s1200/GettyImages-888909452.jpg',
-            ],
-            [
-                'id' => 5,
-                'image_path' => 'https://i2-prod.manchestereveningnews.co.uk/incoming/article16988671.ece/ALTERNATES/s615/0_GettyImages-1171118731.jpg',
-            ]
-        ];
-
         $club = [
             'id' => $data->id,
             'name' => $data->name,
@@ -65,7 +45,7 @@ class ClubController extends Controller
             'latitude' => $data->latitude,
             'longitude' => $data->longitude,
             'description' => ($data->desc) ? $data->desc : '',
-            'thumbnail_image' => config('app.bolasoft_url').$data->thumbnail_image_path,
+            'thumbnail_image' => ($data->thumbnail_image_path) ? config('app.bolasoft_url').$data->thumbnail_image_path : '',
             'coach' => $data->coach->count() . ' pelatih',
             // 'coach' => '3 pelatih',
             'association' => 'Terdaftar di 3 Asosiasi/Paguyuban',
@@ -87,45 +67,48 @@ class ClubController extends Controller
     public function update(Request $request)
     {
         if (!empty($request->class_id)) {
-            // if (!empty($request->club_id)) {
-            $student = auth()->user()->student;
-            // $payment = auth()->user()->order;
+            $user = auth()->user();
+            $kelas = Classes::find($request->class_id);
 
-            // if (!empty($payment) && $payment->payment_status == 2) {
-                if (isset($student)) {
-                    $user_auth = auth()->user();
-                    $kelas = Classes::find($request->class_id);
+            if (empty($kelas)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Kelas tidak ditemukan'
+                ]);
+            }
 
-                    $club = Club::find($kelas->club_id);
-                    // $club = Club::find($request->club_id);
-                    $user = User::find($user_auth->id)->update([
-                        'club_id' => $kelas->club_id,
-                        // 'club_id' => $request->club_id,
-                        'paguyuban_id' => $club->paguyuban_id,
-                    ]);
+            // $club = Club::find($kelas->club_id);
+            // $user = User::find($user->id)->update([
+            //     'club_id' => $kelas->club_id,
+            //     'paguyuban_id' => $club->paguyuban_id,
+            // ]);
 
-                    $student = Student::find($user_auth->detail_id);
-                    $student->club_id = $kelas->club_id;
-                    $student->class_id = $request->class_id;
-                    $student->save();
+            // $student = Student::find($user->detail_id);
+            // $student->club_id = $kelas->club_id;
+            // $student->class_id = $request->class_id;
+            // $student->save();
 
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => 'Kelas berhasil dipilih'
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Silahkan lengkapi profile terlebih dahulu'
-                    ]);
-                }
-            // } else {
-            //     return response()->json([
-            //         'status' => 'error',
-            //         'message' => 'Silahkan lakukan pembayaran terlebih dahulu'
-            //     ]);
-            // }
+            $SC = StudentClass::where('student_id', $user->detail_id)
+                ->where('status', 1)
+                ->count();
+            if ($SC) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Silahkan hubungi ssb sebelumnya untuk me-non-aktifkan akunnya'
+                ]);
+            }
 
+            $data = new StudentClass;
+            $data->student_id = $user->detail_id;
+            $data->club_id = $kelas->club_id;
+            $data->class_id = $request->class_id;
+            $data->status = 1;
+            $data->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Kelas berhasil dipilih'
+            ]);
         } else {
             return response()->json([
                 'status' => 'error',
@@ -133,4 +116,5 @@ class ClubController extends Controller
             ]);
         }
     }
+
 }

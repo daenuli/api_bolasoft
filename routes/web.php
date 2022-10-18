@@ -33,14 +33,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('profile', 'AboutController@update_profile');
         $router->get('home', 'HomeController@index');
 
-        $router->post('kelas', 'KelasController@index');
+            $router->group(['middleware' => 'checkPayment'], function () use ($router) {
+                $router->post('kelas', 'KelasController@index');
+    
+                $router->get('club', 'ClubController@index');
+                $router->post('choose_kelas', 'ClubController@update');
+                $router->get('club/{id}', 'ClubController@show');
+    
+                $router->group(['middleware' => 'checkKelas'], function () use ($router) {
+                    $router->get('tournament', 'TournamentController@index');
+                    $router->get('competition_status', 'TournamentController@status');
+                });
+            });
 
-        $router->get('club', 'ClubController@index');
-        $router->post('choose_kelas', 'ClubController@update');
-        $router->get('club/{id}', 'ClubController@show');
-
-        $router->get('tournament', 'TournamentController@index');
-        $router->get('competition_status', 'TournamentController@status');
 
         $router->get('payment', 'PaymentController@index');
         
