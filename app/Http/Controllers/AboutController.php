@@ -61,7 +61,7 @@ class AboutController extends Controller
             'age' => isset($detail) ? Carbon::parse($detail->date_of_birth)->age : '',
             'weight' => isset($detail) ? (int) $detail->weight : '',
             'height' => isset($detail) ? (int) $detail->height : '',
-            'parent_name' => isset($detail) ? $detail->parent_name : '',
+            'parent_name' => isset($detail->parent_name) ? $detail->parent_name : '',
             // 'class_id' => isset($detail) ? $detail->class_id : '',
             // 'class_name' => isset($detail) ? $detail->classes->name_class : '',
             'ssb_name' => isset($student_class) ? $student_class->club->name : '',
