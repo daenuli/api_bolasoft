@@ -98,6 +98,10 @@ class ClubController extends Controller
                 ]);
             }
 
+            $user = User::find($user->id);
+            $user->confirmed = 'p';
+            $user->save();
+
             $data = new StudentClass;
             $data->student_id = $user->detail_id;
             $data->club_id = $kelas->club_id;

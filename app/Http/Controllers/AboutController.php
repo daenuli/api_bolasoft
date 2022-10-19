@@ -29,7 +29,7 @@ class AboutController extends Controller
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
             'date_of_birth' => isset($student) ? $student->date_of_birth : '',
             'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : '',
-            'thumbnail_image' => isset($student) ? config('app.bolasoft_url').$student->thumbnail_image_path : '',
+            'thumbnail_image' => isset($student) ? config('app.bolasoft_url_api').$student->thumbnail_image_path : '',
             'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' =>isset($student) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
@@ -52,7 +52,7 @@ class AboutController extends Controller
             'role' => $user->role,
             'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
-            'thumbnail_image' => isset($detail->thumbnail_image_path) ? config('app.bolasoft_url').$detail->thumbnail_image_path : null,
+            'thumbnail_image' => isset($detail->thumbnail_image_path) ? config('app.bolasoft_url_api').$detail->thumbnail_image_path : null,
             'nik' => isset($detail) ? $detail->nik : '',
             'nick_name' => isset($detail) ? $detail->nick_name : '',
             'address' => isset($detail) ? $detail->address : '',
