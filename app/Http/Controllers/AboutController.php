@@ -271,13 +271,13 @@ class AboutController extends Controller
         } else {
 
             $validator = Validator::make($request->all(), [
-                'nik' => 'required|string|min:3|unique:students,nik,'.$user->detail_id,
-                'name' => 'required|string|min:3|max:255',
-                'nick_name' => 'required|string|min:3|max:50',
+                'nik' => 'string|min:3|unique:students,nik,'.$user->detail_id,
+                'name' => 'string|min:3|max:255',
+                'nick_name' => 'string|min:3|max:50',
                 // 'class_id' => 'required',
-                'date_of_birth' => 'required|date',
-                'place_of_birth' => 'required|string|min:3|max:255',
-                'address' => 'required|string|min:5|max:255',
+                'date_of_birth' => 'date',
+                'place_of_birth' => 'string|min:3|max:255',
+                'address' => 'string|min:5|max:255',
                 'photo' => 'mimes:jpg,png',
                 'akta' => 'mimes:jpg,png,pdf',
                 'kartu_keluarga' => 'mimes:jpg,png,pdf',
