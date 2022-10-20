@@ -12,4 +12,9 @@ class StudentClass extends Model
     {
         return $this->belongsTo(Club::class);
     }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
 }
