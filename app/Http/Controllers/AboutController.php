@@ -301,7 +301,7 @@ class AboutController extends Controller
             $student->parent_name = ($request->parent_name) ? $request->parent_name : $student->parent_name;
             $student->save();
 
-            $user->name = $request->name;
+            $user->name = ($request->name) ? $request->name : $student->name;
             $user->save();
 
             if (!is_dir('./upload/student/')) {
