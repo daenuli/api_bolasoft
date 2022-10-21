@@ -43,7 +43,7 @@ class AboutController extends Controller
         $detail = auth()->user()->student;
         $payment = auth()->user()->order;
         $student_class = auth()->user()->student_class;
-
+        
         $data = [
             'id' => $user->id,
             'name' => $user->name,
@@ -53,9 +53,9 @@ class AboutController extends Controller
             'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
             'thumbnail_image' => !empty($detail->thumbnail_image_path) ? config('app.bolasoft_url_api').$detail->thumbnail_image_path : '',
-            'akta_image' => !empty($user->student_asset('akta_lahir')->path) ? config('app.bolasoft_url_api').$user->student_asset('akta_lahir')->path : '',
-            'ijazah_image' => !empty($user->student_asset('ijasah')->path) ? config('app.bolasoft_url_api').$user->student_asset('ijasah')->path : '',
-            'kartu_keluarga_image' => !empty($user->student_asset('kartu_keluarga')->path) ? config('app.bolasoft_url_api').$user->student_asset('kartu_keluarga')->path : '',
+            'akta_image' => !empty($user->student_asset('akta_lahir')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('akta_lahir')->first()->path : '',
+            'ijazah_image' => !empty($user->student_asset('ijasah')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('ijasah')->first()->path : '',
+            'kartu_keluarga_image' => !empty($user->student_asset('kartu_keluarga')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('kartu_keluarga')->first()->path : '',
             'nik' => !empty($detail->nik) ? $detail->nik : '',
             'nick_name' => !empty($detail->nick_name) ? $detail->nick_name : '',
             'address' => !empty($detail->address) ? $detail->address : '',
