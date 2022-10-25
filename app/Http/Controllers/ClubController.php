@@ -17,7 +17,7 @@ class ClubController extends Controller
         $club_name = $request->club_name;
         $province_name = $request->province_name;
         $paguyuban_name = $request->paguyuban_name;
-        $data = Club::leftJoin('paguyubans', 'clubs.paguyuban_id', '=', 'paguyubans.id')
+        $club = Club::leftJoin('paguyubans', 'clubs.paguyuban_id', '=', 'paguyubans.id')
                 ->leftJoin('provinces', 'paguyubans.province_id', '=', 'provinces.id_propinsi')
                 ->select('clubs.id', 'provinces.nama_propinsi as province_name', 'paguyubans.name as paguyuban_name', 'clubs.name as club_name', 'clubs.telp', 'clubs.address', 'clubs.number_of_student', 'clubs.thumbnail_image_path')
                 ->when($club_name, function ($query, $club_name) {
@@ -30,6 +30,18 @@ class ClubController extends Controller
                     $query->where('paguyubans.name', 'like', '%'.$paguyuban_name.'%');
                 })
                 ->get();
+        $data = $club->map(function ($item, $key) {
+            return [
+                'id' => $item->id,
+                'province_name' => $item->province_name,
+                'paguyuban_name' => $item->paguyuban_name,
+                'club_name' => $item->club_name,
+                'telp' => $item->telp,
+                'address' => $item->address,
+                'number_of_student' => $item->number_of_student,
+                'thumbnail_image_path' => ($item->thumbnail_image_path) ? config('app.bolasoft_url').$item->thumbnail_image_path : '',
+            ];
+        });
         return response()->json($data);
     }
 
