@@ -26,20 +26,23 @@ class PaymentController extends Controller
 
     public function index()
     {
-        // return Config::getBaseUrl();
-        // return Config::$serverKey;
         $user = auth()->user();
 
-        // return $user->order;
-
-        if (!empty($user->order)) {
-            // return 'ada';
+        if (!empty($user->order) && $user->order->payment_status == 2) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Tidak boleh melakukan payment lebih dari satu kali',
+                'message' => 'Pembayaran lunas, tidak boleh melakukan payment lebih dari satu kali',
             ]);
-        } else {
-            // return 'tidak ada';
+        }
+
+        if (!empty($user->order) && $user->order->payment_status == 1) {
+            return response()->json([
+                'token' => $user->order->snap_token,
+                'redirect_url' => $user->order->redirect_url
+            ]);
+        }
+
+        if (empty($user->order)) {
             $price = 40000;
 
             $order_id = $this->generateUniqueCode();
