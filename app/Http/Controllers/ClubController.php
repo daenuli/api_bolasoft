@@ -133,4 +133,22 @@ class ClubController extends Controller
         }
     }
 
+    public function history()
+    {
+        $user = auth()->user();
+
+        $kelas = StudentClass::where('student_id', $user->detail_id)->where('status', 0)->get();
+        if ($kelas) {
+            $data = $kelas->map(function ($item, $key) {
+                return [
+                    'id' => $item->id,
+                    'ssb' => $item->club->name,
+                    'kelas' => $item->kelas->class_category->name,
+                    'date' => 'Masuk ('.Carbon::parse($item->created_at)->format('d/m/Y').') - Keluar ('.Carbon::parse($item->updated_at)->format('d/m/Y').')'
+                ];
+            });
+        }
+        return response()->json($kelas);
+    }
+
 }
