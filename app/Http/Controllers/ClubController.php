@@ -148,8 +148,8 @@ class ClubController extends Controller
                     'date' => 'Masuk ('.Carbon::parse($item->created_at)->format('d/m/Y').') - Keluar ('.Carbon::parse($item->updated_at)->format('d/m/Y').')'
                 ];
             });
+            return response()->json($data);
         }
-        return response()->json($kelas);
     }
 
 }
