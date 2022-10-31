@@ -68,7 +68,7 @@ class AboutController extends Controller
             // 'class_id' => isset($detail) ? $detail->class_id : '',
             // 'class_name' => isset($detail) ? $detail->classes->name_class : '',
             'ssb_name' => $student_class->club->name ?? '',
-            'ssb_image' => $student_class->club->thumbnail_image_path ? config('app.bolasoft_url_api').$student_class->club->thumbnail_image_path : '',
+            'ssb_image' => isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url_api').$student_class->club->thumbnail_image_path : '',
             // 'ssb_name' => isset($student_class) && ($user->confirmed == 'y') ? $student_class->club->name : '',
             // 'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' => isset($detail) ? true : false,
