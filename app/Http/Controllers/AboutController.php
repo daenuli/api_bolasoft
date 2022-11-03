@@ -44,13 +44,30 @@ class AboutController extends Controller
         $payment = auth()->user()->order;
         $student_class = auth()->user()->student_class;
         
+        $ssb_name = "";
+        $ssb_image = "";
+        if (!$student_class) {
+            $ssb_confirm = 'pilih_sekolah';
+        } else {
+            if ($student_class->confirm == 'waiting') {
+                $ssb_confirm = 'menunggu_konfirmasi';
+            } else if ($student_class->confirm == 'accept') {
+                $ssb_confirm = 'request_keluar';
+                $ssb_name = $student_class->club->name ?? '';
+                $ssb_image = isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '';
+            } else if ($student_class->confirm == 'decline') {
+                $ssb_confirm = 'pilih_sekolah';
+            }
+        }
+
         $data = [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'wa_number' => $user->wa_number,
             'role' => $user->role,
-            'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
+            'ssb_confirmed' => $ssb_confirm,
+            // 'ssb_confirmed' => ($user->confirmed == 'p') ? false : true,
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
             'thumbnail_image' => !empty($detail->thumbnail_image_path) ? config('app.bolasoft_url_api').$detail->thumbnail_image_path : '',
             'akta_image' => !empty($user->student_asset('akta_lahir')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('akta_lahir')->first()->path : '',
@@ -67,8 +84,10 @@ class AboutController extends Controller
             'parent_name' => !empty($detail->parent_name) ? $detail->parent_name : '',
             // 'class_id' => isset($detail) ? $detail->class_id : '',
             // 'class_name' => isset($detail) ? $detail->classes->name_class : '',
-            'ssb_name' => $student_class->club->name ?? '',
-            'ssb_image' => isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '',
+            'ssb_name' => $ssb_name,
+            // 'ssb_name' => $student_class->club->name ?? '',
+            'ssb_image' => $ssb_image,
+            // 'ssb_image' => isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '',
             // 'ssb_name' => isset($student_class) && ($user->confirmed == 'y') ? $student_class->club->name : '',
             // 'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' => isset($detail) ? true : false,

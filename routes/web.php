@@ -46,6 +46,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
                     $router->get('competition_status', 'TournamentController@status');
                     $router->get('schedule', 'ScheduleController@index');
                     $router->get('history', 'ClubController@history');
+                    $router->get('resign', 'ClubController@school_resign');
                 });
             });
 

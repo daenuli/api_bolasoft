@@ -103,6 +103,7 @@ class ClubController extends Controller
 
             $SC = StudentClass::where('student_id', $user->detail_id)
                 ->where('status', 1)
+                ->where('confirm', 'accept')
                 ->count();
             if ($SC) {
                 return response()->json([
@@ -111,15 +112,16 @@ class ClubController extends Controller
                 ]);
             }
 
-            $user = User::find($user->id);
-            $user->confirmed = 'p';
-            $user->save();
+            // $user = User::find($user->id);
+            // $user->confirmed = 'p';
+            // $user->save();
 
             $data = new StudentClass;
             $data->student_id = $user->detail_id;
             $data->club_id = $kelas->club_id;
             $data->class_id = $request->class_id;
             $data->status = 1;
+            $data->confirm = 'waiting';
             $data->save();
 
             return response()->json([
@@ -138,7 +140,10 @@ class ClubController extends Controller
     {
         $user = auth()->user();
 
-        $kelas = StudentClass::where('student_id', $user->detail_id)->where('status', 0)->get();
+        $kelas = StudentClass::where('student_id', $user->detail_id)
+        ->where('status', 0)
+        ->where('confirm', 'accept')
+        ->get();
         if ($kelas) {
             $data = $kelas->map(function ($item, $key) {
                 return [
@@ -150,6 +155,21 @@ class ClubController extends Controller
             });
             return response()->json($data);
         }
+    }
+
+    public function school_resign()
+    {
+        $user = auth()->user();
+        StudentClass::where([
+            ['student_id', $user->detail_id],
+            ['status', 1],
+            ['confirm', 'accept'],
+        ])->update(['status' => 0]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil request keluar sekolah'
+        ]);
     }
 
 }

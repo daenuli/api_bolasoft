@@ -17,12 +17,18 @@ class CheckKelas
     {
         $student_class = auth()->user()->student_class;
 
-        if (empty($student_class)) {
+        if (empty($student_class) || $student_class->confirm == 'waiting') {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Untuk melihat tournament, silahkan pilih kelas terlebih dahulu'
             ]);
         }
+        // if (empty($student_class)) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Untuk melihat tournament, silahkan pilih kelas terlebih dahulu'
+        //     ]);
+        // }
 
         return $next($request);
     }
