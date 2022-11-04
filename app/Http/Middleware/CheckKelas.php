@@ -20,7 +20,7 @@ class CheckKelas
         if (empty($student_class) || $student_class->confirm == 'waiting') {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Untuk melihat tournament, silahkan pilih kelas terlebih dahulu'
+                'message' => 'Untuk melihat halaman ini, silahkan pilih kelas terlebih dahulu'
             ]);
         }
         // if (empty($student_class)) {
