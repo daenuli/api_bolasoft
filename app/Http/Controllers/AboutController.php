@@ -167,6 +167,7 @@ class AboutController extends Controller
                 $student->save();
 
                 $user->detail_id = $student->id;
+                $user->email = $request->email;
                 $user->name = $request->name;
                 $user->save();
 
