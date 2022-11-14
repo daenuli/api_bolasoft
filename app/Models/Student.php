@@ -9,25 +9,35 @@ class Student extends Model
     
     public $fillable = ['email_verified_at'];
 
-    public function students(){
+    public function students()
+    {
         return $this->hasMany(Student::class);
     }
 
-    public function classes(){
+    public function classes()
+    {
         return $this->belongsTo(Classes::class, 'class_id', 'id');
         // return $this->hasMany(Classes::class);
     }
 
-    public function schedules(){
+    public function schedules()
+    {
         return $this->hasMany(Schedule::class)->orderBy('id', 'desc');
     }
 
-    public function paguyuban(){
+    public function paguyuban()
+    {
         return $this->belongsTo(Paguyuban::class);
     }
 
-    public function users(){
+    public function users()
+    {
         return $this->hasMany(User::class);
+    }
+
+    public function siswa()
+    {
+        return $this->belongsTo(User::class, 'id', 'detail_id');
     }
 
 }

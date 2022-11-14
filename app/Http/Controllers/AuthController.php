@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use App\Mail\Verification;
 use App\Mail\Information;
 use Illuminate\Support\Facades\Mail;
+use App\Models\ActivityLog;
+use App\Jobs\SignupJob;
 
 class AuthController extends Controller
 {
@@ -47,7 +49,9 @@ class AuthController extends Controller
                 'wa' => $user->wa_number,
             );
 
-            Mail::to($request->email)->send(new Verification($url));
+            $details = ['url' => $url, 'email' => $request->email];
+            dispatch(new SignupJob($details));
+            // Mail::to($request->email)->send(new Verification($url));
             // Mail::to('brata@bolasoft.id')->send(new Information($param));
             return response()->json([
                 'status' => 'success',
@@ -149,10 +153,18 @@ class AuthController extends Controller
         return Str::random(32);
     }
 
-    public function student_activation(Request $request){
+    public function student_activation(Request $request)
+    {
         $user = User::find(decrypt($request->token));
         $user->is_active = 'y';
         $user->save();
+
+        ActivityLog::create([
+            'user_id' => $user->id, 
+            'type' => 'signup',
+            'title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!'
+        ]);
+
         // return redirect()->route('home');
         return response()->json([
             'status' => 'success',

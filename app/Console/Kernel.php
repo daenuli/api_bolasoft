@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\TournamentWeeks::class,
+        Commands\TournamentTomorrow::class,
+        Commands\TrainingToday::class,
     ];
 
     /**
@@ -24,6 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->command('tournament:weeks')->dailyAt('02:00');
+        $schedule->command('tournament:tomorrow')->dailyAt('03:00');
+        $schedule->command('training:today')->dailyAt('04:00');
+        // $schedule->command('tournament:weeks')->dailyAt('23:35');
     }
 }

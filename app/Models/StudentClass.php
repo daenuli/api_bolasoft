@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentClass extends Model
 {
-    //
 
     public function club()
     {
@@ -16,5 +15,15 @@ class StudentClass extends Model
     public function kelas()
     {
         return $this->belongsTo(Classes::class, 'class_id');
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class, 'class_id', 'class_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'student_id', 'detail_id');
     }
 }

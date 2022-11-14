@@ -63,6 +63,7 @@ $app->configure('app');
 $app->configure('auth');
 $app->configure('midtrans');
 $app->configure('mail');
+$app->configure('queue');
 
 /*
 |--------------------------------------------------------------------------

@@ -6,6 +6,7 @@ use Midtrans\Config;
 use Midtrans\Snap;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
 
 class PaymentController extends Controller
 {
@@ -106,6 +107,13 @@ class PaymentController extends Controller
                 // $user->save();
 
                 $order->payment_status = 2;
+
+                ActivityLog::create([
+                    'user_id' => $order->user_id, 
+                    'type' => 'signup',
+                    'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
+                ]);
+
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = 3;
             } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
