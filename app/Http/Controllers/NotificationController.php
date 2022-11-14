@@ -2,11 +2,32 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
+use Carbon\Carbon;
 
 class NotificationController extends Controller
 {
 
     public function index()
+    {
+        $user = auth()->user();
+
+        $data = ActivityLog::orderBy('id', 'desc')
+                ->where('user_id', $user->id)
+                ->get()
+                ->map(function ($item, $key) {
+                    return [
+                        'id' => $item->id,
+                        'name' => 'System Bolasoft',
+                        'type' => $item->type,
+                        'message' => $item->title,
+                        'date' => Carbon::parse($item->created_at)->format('F d, Y'),
+                    ];
+                });
+        return response()->json($data);
+    }
+
+    public function _index()
     {
         $data = [
             [
