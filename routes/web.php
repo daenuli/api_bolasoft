@@ -18,7 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 $router->get('/', function () use ($router) {
-    // return $router->app->version();
+    return $router->app->version();
     $date_now = Carbon::now()->toDateString();
 
     $data = StudentClass::where([
