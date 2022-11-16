@@ -7,18 +7,18 @@ services:
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: apibolasoft
-    container_name: apibolasoft-app
+    image: backend
+    container_name: backend-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./:/var/www
     networks:
-      - apibolasoft
+      - backend
 
   nginx:
     image: nginx:alpine
-    container_name: apibolasoft-nginx
+    container_name: backend-nginx
     restart: unless-stopped
     ports:
       - "5001:80"
@@ -26,8 +26,8 @@ services:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
     networks:
-      - apibolasoft
+      - backend
 
 networks:
-  apibolasoft:
+  backend:
     driver: bridge
