@@ -10,7 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
 use Laravel\Lumen\Routing\UrlGenerator;
-use Spatie\PdfToImage\Pdf;
+// use Spatie\PdfToImage\Pdf;
 
 class AboutController extends Controller
 {
@@ -207,12 +207,12 @@ class AboutController extends Controller
                     $destination_akta = './upload/student/';
                     $new_file_name_akta = 'akta_' . time() . '.' .((strtolower($file_ext_akta)=='pdf') ? 'jpg' : $file_ext_akta);
                     
-                    if (strtolower($file_ext_akta) == 'pdf') {
-                        $pdf = new Pdf($aktaTemp);
-                        $pdf->saveImage($destination_akta.'akta_' . time() . '.jpg');
-                    } else {
+                    // if (strtolower($file_ext_akta) == 'pdf') {
+                    //     $pdf = new Pdf($aktaTemp);
+                    //     $pdf->saveImage($destination_akta.'akta_' . time() . '.jpg');
+                    // } else {
                         $this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50);
-                    }
+                    // }
                     
                     // if ($this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50)) {
                         $data[1]['name'] = $file_name_akta;
@@ -231,12 +231,12 @@ class AboutController extends Controller
                     // $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .$file_ext_kk;
                     $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .((strtolower($file_ext_kk) == 'pdf') ? 'jpg' : $file_ext_kk);
 
-                    if (strtolower($file_ext_kk) == 'pdf') {
-                        $pdf = new Pdf($kkTemp);
-                        $pdf->saveImage($destination_kk.'kartu_keluarga_' . time() . '.jpg');
-                    } else {
+                    // if (strtolower($file_ext_kk) == 'pdf') {
+                    //     $pdf = new Pdf($kkTemp);
+                    //     $pdf->saveImage($destination_kk.'kartu_keluarga_' . time() . '.jpg');
+                    // } else {
                         $this->compressImage($kkTemp, $destination_kk.$new_file_name_kk, 50);
-                    }
+                    // }
                     
                     // if ($this->compressImage($kkTemp, $destination_kk.$new_file_name_kk, 50)) {
                         // if ($request->file('kartu_keluarga')->move($destination_kk, $new_file_name_kk)) {
@@ -255,12 +255,12 @@ class AboutController extends Controller
                     $destination_ijazah = './upload/student/';
                     $new_file_name_ijazah = 'ijasah_' . time() . '.' .((strtolower($file_ext_ijazah) == 'pdf') ? 'jpg' : $file_ext_ijazah);
                     
-                    if (strtolower($file_ext_ijazah) == 'pdf') {
-                        $pdf = new Pdf($ijazahTemp);
-                        $pdf->saveImage($destination_ijazah.'ijasah_' . time() . '.jpg');
-                    } else {
+                    // if (strtolower($file_ext_ijazah) == 'pdf') {
+                    //     $pdf = new Pdf($ijazahTemp);
+                    //     $pdf->saveImage($destination_ijazah.'ijasah_' . time() . '.jpg');
+                    // } else {
                         $this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50);
-                    }
+                    // }
 
                     // if ($this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50)) {
                         // if ($request->file('ijasah')->move($destination_ijazah, $new_file_name_ijazah)) {
@@ -381,12 +381,12 @@ class AboutController extends Controller
                 $destination_akta = './upload/student/';
                 $new_file_name_akta = 'akta_' . time() . '.' .((strtolower($file_ext_akta)=='pdf') ? 'jpg' : $file_ext_akta);
 
-                if (strtolower($file_ext_akta) == 'pdf') {
-                    $pdf = new Pdf($aktaTemp);
-                    $pdf->saveImage($destination_akta.'akta_' . time() . '.jpg');
-                } else {
+                // if (strtolower($file_ext_akta) == 'pdf') {
+                //     $pdf = new Pdf($aktaTemp);
+                //     $pdf->saveImage($destination_akta.'akta_' . time() . '.jpg');
+                // } else {
                     $this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50);
-                }
+                // }
 
                     // if ($this->compressImage($aktaTemp, $destination_akta.$new_file_name_akta, 50)) {
                 $sa = StudentAsset::where([
@@ -424,12 +424,12 @@ class AboutController extends Controller
                 // $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .$file_ext_kk;
                 $new_file_name_kk = 'kartu_keluarga_' . time() . '.' .((strtolower($file_ext_kk) == 'pdf') ? 'jpg' : $file_ext_kk);
 
-                if (strtolower($file_ext_kk) == 'pdf') {
-                    $pdf = new Pdf($kkTemp);
-                    $pdf->saveImage($destination_kk.'kartu_keluarga_' . time() . '.jpg');
-                } else {
+                // if (strtolower($file_ext_kk) == 'pdf') {
+                //     $pdf = new Pdf($kkTemp);
+                //     $pdf->saveImage($destination_kk.'kartu_keluarga_' . time() . '.jpg');
+                // } else {
                     $this->compressImage($kkTemp, $destination_kk.$new_file_name_kk, 50);
-                }
+                // }
 
                 // if ($this->compressImage($kkTemp, $destination_kk.$new_file_name_kk, 50)) {
                 $sa = StudentAsset::where([
@@ -465,12 +465,12 @@ class AboutController extends Controller
                 $destination_ijazah = './upload/student/';
                 $new_file_name_ijazah = 'ijasah_' . time() . '.' .((strtolower($file_ext_ijazah) == 'pdf') ? 'jpg' : $file_ext_ijazah);
                 // $new_file_name_ijazah = 'ijasah_' . time() . '.' .$file_ext_ijazah;
-                if (strtolower($file_ext_ijazah) == 'pdf') {
-                    $pdf = new Pdf($ijazahTemp);
-                    $pdf->saveImage($destination_ijazah.'ijasah_' . time() . '.jpg');
-                } else {
+                // if (strtolower($file_ext_ijazah) == 'pdf') {
+                //     $pdf = new Pdf($ijazahTemp);
+                //     $pdf->saveImage($destination_ijazah.'ijasah_' . time() . '.jpg');
+                // } else {
                     $this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50);
-                }
+                // }
 
                 // if ($this->compressImage($ijazahTemp, $destination_ijazah.$new_file_name_ijazah, 50)) {
                 $sa = StudentAsset::where([
