@@ -24,7 +24,14 @@ class NotificationController extends Controller
                         'date' => Carbon::parse($item->created_at)->format('F d, Y'),
                     ];
                 });
-        return response()->json($data);
+        $log = ActivityLog::where('user_id', $user->id);
+        $unread = $log->where('is_read', 0)->count();
+        $read = $log->where('is_read', 1)->count();
+        return response()->json([
+            'data' => $data,
+            'unread_notif' => $unread,
+            'read_notif' => $read
+        ]);
     }
 
     public function _index()
