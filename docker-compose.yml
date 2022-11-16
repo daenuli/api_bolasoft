@@ -3,7 +3,7 @@ services:
   api:
     build:
       args:
-        user: root
+        user: inovis
         uid: 1000
       context: ./
       dockerfile: Dockerfile
