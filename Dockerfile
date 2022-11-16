@@ -21,16 +21,12 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Imagick extension
-# RUN apt-get install -y libmagickwand-dev; \
-#     pecl install imagick; \
-#     docker-php-ext-enable imagick; \
-#     # Success
-#     true
-RUN apt-get install -y \
-    imagemagick libmagickwand-dev --no-install-recommends \
-    && pecl install imagick \
-    && docker-php-ext-enable imagick
-
+RUN apt-get install -y libmagickwand-dev; \
+    pecl install imagick; \
+    docker-php-ext-enable imagick; \
+    docker-php-ext-enable imagick; \
+    # Success
+    true
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
