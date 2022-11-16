@@ -21,9 +21,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Imagick extension
-RUN apt-get install -y libmagickwand-dev; \
-    pecl install imagick; \
-    docker-php-ext-enable imagick; \
+RUN apt install imagemagick; \
     docker-php-ext-enable imagick; \
     # Success
     true
