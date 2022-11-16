@@ -21,8 +21,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Imagick extension
-RUN apt install imagemagick; \
-    docker-php-ext-enable imagick; \
+CMD apt install imagemagick
+RUN docker-php-ext-enable imagick; \
     # Success
     true
 # Get latest Composer
