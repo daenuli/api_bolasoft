@@ -1,24 +1,24 @@
 version: "3.7"
 services:
-  api:
+  app:
     build:
       args:
         user: root
         #uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: backend
-    container_name: backend-app
+    image: bola
+    container_name: bola-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./:/var/www
     networks:
-      - backend
+      - bola
 
   nginx:
     image: nginx:alpine
-    container_name: backend-nginx
+    container_name: bola-nginx
     restart: unless-stopped
     ports:
       - "5001:80"
@@ -26,8 +26,8 @@ services:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
     networks:
-      - backend
+      - bola
 
 networks:
-  backend:
+  bola:
     driver: bridge
