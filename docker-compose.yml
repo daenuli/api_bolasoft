@@ -11,8 +11,6 @@ services:
     container_name: backend-app
     restart: unless-stopped
     working_dir: /var/www/
-    extra_hosts:
-        host.docker.internal: host-gateway
     volumes:
       - ./:/var/www
     networks:
