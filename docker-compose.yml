@@ -21,7 +21,7 @@ services:
     container_name: bola-nginx
     restart: unless-stopped
     ports:
-      - "5001:80"
+      - "5002:80"
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
