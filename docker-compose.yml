@@ -1,33 +1,33 @@
 version: "3.7"
 services:
-  app:
+  api:
     build:
       args:
-        user: root
-        #uid: 1000
+        user: inovis
+        uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: bola
-    container_name: bola-app
+    image: backend
+    container_name: backend-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./:/var/www
     networks:
-      - bola
+      - backend
 
   nginx:
     image: nginx:alpine
-    container_name: bola-nginx
+    container_name: backend-nginx
     restart: unless-stopped
     ports:
-      - "5002:80"
+      - "5001:80"
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
     networks:
-      - bola
+      - backend
 
 networks:
-  bola:
+  backend:
     driver: bridge
