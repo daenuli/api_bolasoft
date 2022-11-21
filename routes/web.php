@@ -12,10 +12,10 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-use App\Models\ActivityLog;
-use App\Models\StudentClass;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+// use App\Models\ActivityLog;
+// use App\Models\StudentClass;
+// use Carbon\Carbon;
+// use Illuminate\Database\Eloquent\Builder;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -42,7 +42,7 @@ $router->get('/', function () use ($router) {
     //     ['title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!']
     // );
 
-    return response()->json($data);
+    // return response()->json($data);
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
