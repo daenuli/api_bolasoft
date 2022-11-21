@@ -9,7 +9,6 @@ use Illuminate\Queue\SerializesModels;
 
 abstract class Job implements ShouldQueue
 {
-    public $timeout = 0;
     /*
     |--------------------------------------------------------------------------
     | Queueable Jobs
