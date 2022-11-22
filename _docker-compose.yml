@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  test:
+    build:
+      args:
+        user: root
+        #uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: testapi
+    container_name: testapi-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - testapi
+
+  testapinginx:
+    image: nginx:alpine
+    container_name: testapi-nginx
+    restart: unless-stopped
+    ports:
+      - "5001:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+    networks:
+      - testapi
+      
+  certbot:
+    depends_on:
+      - testapinginx
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - ./:/var/www
+    command: certonly --webroot --webroot-path=/var/www --email rayi@inovis.id --agree-tos --no-eff-email --force-renewal -d api-bolasoft.inovis.id
+
+networks:
+  testapi:
+    driver: bridge
