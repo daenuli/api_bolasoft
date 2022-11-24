@@ -46,6 +46,7 @@ class AboutController extends Controller
         
         $ssb_name = "";
         $ssb_image = "";
+        $ssb_address = "";
         if (!$student_class) {
             $ssb_confirm = 'pilih_sekolah';
         } else {
@@ -55,6 +56,7 @@ class AboutController extends Controller
                 $ssb_confirm = 'request_keluar';
                 $ssb_name = $student_class->club->name ?? '';
                 $ssb_image = isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '';
+                $ssb_address = $student_class->club->address ?? '';
             } else if ($student_class->confirm == 'decline') {
                 $ssb_confirm = 'pilih_sekolah';
             }
@@ -87,6 +89,7 @@ class AboutController extends Controller
             'ssb_name' => $ssb_name,
             // 'ssb_name' => $student_class->club->name ?? '',
             'ssb_image' => $ssb_image,
+            'ssb_address' => $ssb_address,
             // 'ssb_image' => isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '',
             // 'ssb_name' => isset($student_class) && ($user->confirmed == 'y') ? $student_class->club->name : '',
             // 'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
