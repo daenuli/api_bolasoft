@@ -86,6 +86,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->post('notification', 'PaymentController@notification');
+    $router->get('notification/mark_as_read', 'PaymentController@mark_as_read');
+    
     $router->get('activation/student/{token}', ['as' => 'activation.student', 'uses' => 'AuthController@student_activation']);
     // $router->get('activation/student/{token}', 'AuthController@student_activation')->name('activation.student');
 // Route::get('/aktivasi/student/{token}', 'Auth\RegisterController@ActivationStudent')->name('activation.student');
