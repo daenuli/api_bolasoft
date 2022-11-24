@@ -34,6 +34,17 @@ class NotificationController extends Controller
         ]);
     }
 
+    public function mark_as_read()
+    {
+        $user = auth()->user();
+        ActivityLog::where('user_id', $user->id)->update(['is_read' => 1]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'success mark as read'
+        ]);
+    }
+
     public function _index()
     {
         $data = [
