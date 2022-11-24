@@ -156,19 +156,25 @@ class AuthController extends Controller
     public function student_activation(Request $request)
     {
         $user = User::find(decrypt($request->token));
-        $user->is_active = 'y';
-        $user->save();
 
-        ActivityLog::create([
-            'user_id' => $user->id, 
-            'type' => 'signup',
-            'title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!'
-        ]);
+        if ($user->is_active != 'y') {
 
-        // return redirect()->route('home');
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Aktivasi akun berhasil'
-        ]);
+            $user->is_active = 'y';
+            $user->save();
+
+            ActivityLog::create([
+                'user_id' => $user->id, 
+                'type' => 'signup',
+                'title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!'
+            ]);
+
+            return view('emails.activation');
+            
+            // return redirect()->route('home');
+            // return response()->json([
+            //     'status' => 'success',
+            //     'message' => 'Aktivasi akun berhasil'
+            // ]);
+        }
     }
 }
