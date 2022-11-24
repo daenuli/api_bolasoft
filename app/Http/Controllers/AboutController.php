@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
 use Laravel\Lumen\Routing\UrlGenerator;
+use App\Models\ActivityLog;
 // use Spatie\PdfToImage\Pdf;
 
 class AboutController extends Controller
@@ -43,6 +44,10 @@ class AboutController extends Controller
         $detail = auth()->user()->student;
         $payment = auth()->user()->order;
         $student_class = auth()->user()->student_class;
+
+        $log = ActivityLog::where('user_id', $user->id);
+        $unread = $log->where('is_read', 0)->count();
+        $read = $log->where('is_read', 1)->count();
         
         $ssb_name = "";
         $ssb_image = "";
@@ -90,10 +95,13 @@ class AboutController extends Controller
             // 'ssb_name' => $student_class->club->name ?? '',
             'ssb_image' => $ssb_image,
             'ssb_address' => $ssb_address,
+            'notif_unread' => $unread,
+            'notif_read' => $read,
             // 'ssb_image' => isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '',
             // 'ssb_name' => isset($student_class) && ($user->confirmed == 'y') ? $student_class->club->name : '',
             // 'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' => isset($detail) ? true : false,
+
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
         ];
         // $user = auth()->user();student_class
