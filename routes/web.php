@@ -61,6 +61,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('profile', 'AboutController@update_profile');
         $router->get('home', 'HomeController@index');
         $router->get('notification', 'NotificationController@index');
+        $router->get('notification/mark_as_read', 'NotificationController@mark_as_read');
 
             $router->group(['middleware' => 'checkPayment'], function () use ($router) {
                 $router->post('kelas', 'KelasController@index');
@@ -86,7 +87,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
 
     $router->post('notification', 'PaymentController@notification');
-    $router->get('notification/mark_as_read', 'PaymentController@mark_as_read');
     
     $router->get('activation/student/{token}', ['as' => 'activation.student', 'uses' => 'AuthController@student_activation']);
     // $router->get('activation/student/{token}', 'AuthController@student_activation')->name('activation.student');
