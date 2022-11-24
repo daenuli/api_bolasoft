@@ -47,7 +47,7 @@ class AboutController extends Controller
 
         $log = ActivityLog::where('user_id', $user->id);
         $unread = $log->where('is_read', 0)->count();
-        $read = $log->where('is_read', 1)->count();
+        // $read = $log->where('is_read', 1)->count();
         
         $ssb_name = "";
         $ssb_image = "";
@@ -96,7 +96,7 @@ class AboutController extends Controller
             'ssb_image' => $ssb_image,
             'ssb_address' => $ssb_address,
             'notif_unread' => $unread,
-            'notif_read' => $read,
+            // 'notif_read' => $read,
             // 'ssb_image' => isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '',
             // 'ssb_name' => isset($student_class) && ($user->confirmed == 'y') ? $student_class->club->name : '',
             // 'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
