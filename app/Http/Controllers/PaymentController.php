@@ -181,7 +181,7 @@ class PaymentController extends Controller
                 //     'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
                 // ]);
                 ActivityLog::updateOrCreate(
-                    ['user_id' => $user->id, 'type' => 'payment'],
+                    ['user_id' => $order->id, 'type' => 'payment'],
                     ['title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!']
                 );
 
