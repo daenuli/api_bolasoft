@@ -167,6 +167,10 @@ class PaymentController extends Controller
             $order = Order::where('number', $this->notification->order_id)->first();
             if ($this->notification->transaction_status == 'pending') {
                 $order->payment_status = 1;
+                ActivityLog::updateOrCreate(
+                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['title' => 'Pembayaran Anda belum selesai, silahkan menyelesaikan pembayaran']
+                );
             } else if ($this->notification->transaction_status == 'capture' || $this->notification->transaction_status == 'settlement') {
                 
                 // $user = auth()->user();
@@ -187,8 +191,17 @@ class PaymentController extends Controller
 
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = 3;
+
+                ActivityLog::updateOrCreate(
+                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['title' => 'Batas pembayaran telah berakhir, silahkan ulangi pembayaran']
+                );
             } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
                 $order->payment_status = 4;
+                ActivityLog::updateOrCreate(
+                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['title' => 'Transaksi pembayaran gagal dilakukan']
+                );
             }
             $order->response_midtrans = json_encode($this->notification->getResponse(), true);
             $order->save();
