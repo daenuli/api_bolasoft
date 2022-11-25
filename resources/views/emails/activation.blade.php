@@ -12,8 +12,8 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('media/favicons/bolasoft.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('media/favicons/bolasoft.png') }}">
+    <link rel="icon" sizes="192x192" type="image/png" href="http://kampus.bolasoft.id/media/favicons/bolasoft.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="http://kampus.bolasoft.id/media/favicons/bolasoft.png">
     <title>Bola Soft Activation</title>
     <style>
       @import url('https://rsms.me/inter/inter.css');
