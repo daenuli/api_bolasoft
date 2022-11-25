@@ -82,10 +82,10 @@ class PaymentController extends Controller
 
             $midtrans = Snap::createTransaction($transaction);
 
-            Order::updateOrCreate([
+            Order::updateOrCreate(
                 ['user_id' => $user->id],
                 ['number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
-            ]);
+            );
 
             // return response()->json($midtrans);
             // $order = new Order;
