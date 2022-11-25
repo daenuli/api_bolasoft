@@ -175,11 +175,15 @@ class PaymentController extends Controller
 
                 $order->payment_status = 2;
 
-                ActivityLog::create([
-                    'user_id' => $order->user_id, 
-                    'type' => 'payment',
-                    'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
-                ]);
+                // ActivityLog::create([
+                //     'user_id' => $order->user_id, 
+                //     'type' => 'payment',
+                //     'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
+                // ]);
+                ActivityLog::updateOrCreate(
+                    ['user_id' => $user->id, 'type' => 'payment'],
+                    ['title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!']
+                );
 
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = 3;
