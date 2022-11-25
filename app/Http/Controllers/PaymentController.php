@@ -43,7 +43,15 @@ class PaymentController extends Controller
             ]);
         }
 
-        if (empty($user->order)) {
+        // if (!empty($user->order) && ($user->order->payment_status == 3 || $user->order->payment_status == 4)) {
+        //     return response()->json([
+        //         'token' => $user->order->snap_token,
+        //         'redirect_url' => $user->order->redirect_url
+        //     ]);
+        // }
+        
+
+        if (empty($user->order) || (!empty($user->order) && ($user->order->payment_status == 3 || $user->order->payment_status == 4))) {
             $price = 40000;
 
             $order_id = $this->generateUniqueCode();
@@ -74,20 +82,79 @@ class PaymentController extends Controller
 
             $midtrans = Snap::createTransaction($transaction);
 
+            Order::updateOrCreate([
+                ['user_id' => $user->id],
+                ['number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
+            ]);
+
             // return response()->json($midtrans);
-            $order = new Order;
-            $order->user_id = $user->id;
-            $order->number = $order_id;
-            $order->total_price = $price;
-            $order->snap_token = $midtrans->token;
-            $order->redirect_url = $midtrans->redirect_url;
-            $order->save();
+            // $order = new Order;
+            // $order->user_id = $user->id;
+            // $order->number = $order_id;
+            // $order->total_price = $price;
+            // $order->snap_token = $midtrans->token;
+            // $order->redirect_url = $midtrans->redirect_url;
+            // $order->save();
 
             return response()->json($midtrans);
         }
 
-
     }
+
+    // public function createTransaction($user)
+    // {
+    //     $price = 40000;
+
+    //     $order_id = $this->generateUniqueCode();
+    //     $transaction_detail = array(
+    //         'order_id' => $order_id,
+    //         'gross_amount' => $price,
+    //     );
+
+    //     $item_detail = array(array(
+    //         'id' => 1,
+    //         'price' => $price,
+    //         'quantity' => 1,
+    //         'name' => 'Biaya Registrasi'
+    //     ));
+        
+    //     $customer_detail = array(
+    //         'first_name' => $user->name,
+    //         'email' => $user->email,
+    //         // 'email' => 'giarsyani.nuli@gmail.com',
+    //         'phone' => $user->wa_number
+    //     );
+        
+    //     $transaction = array(
+    //         'transaction_details' => $transaction_detail,
+    //         'customer_details' => $customer_detail,
+    //         'item_details' => $item_detail
+    //     );
+
+    //     $midtrans = Snap::createTransaction($transaction);
+        
+        // if (empty($user->order)) {
+        //     $order = new Order;
+        //     $order->user_id = $user->id;
+        //     $order->number = $order_id;
+        //     $order->total_price = $price;
+        //     $order->snap_token = $midtrans->token;
+        //     $order->redirect_url = $midtrans->redirect_url;
+        //     $order->save();
+        // } else {
+        //     $order = Order::find($user->order->id);
+        //     $order->number = $order_id;
+        //     $order->total_price = $price;
+        //     $order->snap_token = $midtrans->token;
+        //     $order->redirect_url = $midtrans->redirect_url;
+        //     $order->save();
+        // }
+
+        // Order::updateOrCreate([
+        //     ['user_id' => $user->id],
+        //     ['number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
+        // ]);
+    // }
 
     public function notification(Request $request)
     {
@@ -110,7 +177,7 @@ class PaymentController extends Controller
 
                 ActivityLog::create([
                     'user_id' => $order->user_id, 
-                    'type' => 'signup',
+                    'type' => 'payment',
                     'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
                 ]);
 
