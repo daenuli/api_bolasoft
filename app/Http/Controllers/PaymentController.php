@@ -36,12 +36,12 @@ class PaymentController extends Controller
             ]);
         }
 
-        // if (!empty($user->order) && $user->order->payment_status == 1) {
-        //     return response()->json([
-        //         'token' => $user->order->snap_token,
-        //         'redirect_url' => $user->order->redirect_url
-        //     ]);
-        // }
+        if (!empty($user->order) && $user->order->payment_status == 1) {
+            return response()->json([
+                'token' => $user->order->snap_token,
+                'redirect_url' => $user->order->redirect_url
+            ]);
+        }
 
         // if (!empty($user->order) && ($user->order->payment_status == 3 || $user->order->payment_status == 4)) {
         //     return response()->json([
@@ -51,7 +51,7 @@ class PaymentController extends Controller
         // }
         
 
-        // if (empty($user->order) || (!empty($user->order) && ($user->order->payment_status == 3 || $user->order->payment_status == 4))) {
+        if (empty($user->order) || (!empty($user->order) && ($user->order->payment_status == 3 || $user->order->payment_status == 4))) {
             $price = 40000;
 
             $order_id = $this->generateUniqueCode();
@@ -97,7 +97,7 @@ class PaymentController extends Controller
             // $order->save();
 
             return response()->json($midtrans);
-        // }
+        }
 
     }
 
