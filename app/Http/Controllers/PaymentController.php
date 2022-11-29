@@ -18,7 +18,7 @@ class PaymentController extends Controller
     {
         Config::$serverKey = config('midtrans.server_key');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        Config::$isProduction = false;
+        Config::$isProduction = true;
         // Set sanitization on (default)
         Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
