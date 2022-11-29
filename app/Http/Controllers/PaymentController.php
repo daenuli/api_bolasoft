@@ -169,7 +169,7 @@ class PaymentController extends Controller
             if ($this->notification->transaction_status == 'pending') {
                 $order->payment_status = '1';
                 ActivityLog::updateOrCreate(
-                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['user_id' => $order->user_id, 'type' => 'payment'],
                     ['title' => 'Pembayaran Anda belum selesai, silahkan menyelesaikan pembayaran', 'is_read' => 0]
                 );
             } else if ($this->notification->transaction_status == 'capture' || $this->notification->transaction_status == 'settlement') {
@@ -186,20 +186,20 @@ class PaymentController extends Controller
                 //     'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
                 // ]);
                 ActivityLog::updateOrCreate(
-                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['user_id' => $order->user_id, 'type' => 'payment'],
                     ['title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!', 'is_read' => 0]
                 );
 
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = '3';
                 ActivityLog::updateOrCreate(
-                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['user_id' => $order->user_id, 'type' => 'payment'],
                     ['title' => 'Batas pembayaran telah berakhir, silahkan ulangi pembayaran', 'is_read' => 0]
                 );
             } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
                 $order->payment_status = '4';
                 ActivityLog::updateOrCreate(
-                    ['user_id' => $order->id, 'type' => 'payment'],
+                    ['user_id' => $order->user_id, 'type' => 'payment'],
                     ['title' => 'Transaksi pembayaran gagal dilakukan', 'is_read' => 0]
                 );
             }
