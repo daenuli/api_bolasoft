@@ -168,54 +168,32 @@ class PaymentController extends Controller
             $order = Order::where('number', $this->notification->order_id)->first();
             if ($this->notification->transaction_status == 'pending') {
                 $order->payment_status = '1';
-                ActivityLog::updateOrCreate(
-                    ['user_id' => $order->user_id, 'type' => 'payment'],
-                    ['title' => 'Pembayaran Anda belum selesai, silahkan menyelesaikan pembayaran', 'is_read' => 0]
-                );
+                ActivityLog::updateOrCreate([
+                    'user_id' => $order->user_id, 'type' => 'payment',
+                    'title' => 'Pembayaran Anda belum selesai, silahkan menyelesaikan pembayaran'
+                ]);
             } else if ($this->notification->transaction_status == 'capture' || $this->notification->transaction_status == 'settlement') {
-                
-                // $user = auth()->user();
-                // $user->confirmed = 'y';
-                // $user->save();
-
                 $order->payment_status = '2';
-
-                // ActivityLog::create([
-                //     'user_id' => $order->user_id, 
-                //     'type' => 'payment',
-                //     'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
-                // ]);
-                ActivityLog::updateOrCreate(
-                    ['user_id' => $order->user_id, 'type' => 'payment'],
-                    ['title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!', 'is_read' => 0]
-                );
-
+                ActivityLog::updateOrCreate([
+                    'user_id' => $order->user_id, 'type' => 'payment',
+                    'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
+                ]);
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = '3';
-                ActivityLog::updateOrCreate(
-                    ['user_id' => $order->user_id, 'type' => 'payment'],
-                    ['title' => 'Batas pembayaran telah berakhir, silahkan ulangi pembayaran', 'is_read' => 0]
-                );
+                ActivityLog::updateOrCreate([
+                    'user_id' => $order->user_id, 'type' => 'payment', 
+                    'title' => 'Batas pembayaran telah berakhir, silahkan ulangi pembayaran'
+                ]);
             } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
                 $order->payment_status = '4';
-                ActivityLog::updateOrCreate(
-                    ['user_id' => $order->user_id, 'type' => 'payment'],
-                    ['title' => 'Transaksi pembayaran gagal dilakukan', 'is_read' => 0]
-                );
+                ActivityLog::create([
+                    'user_id' => $order->user_id, 'type' => 'payment', 
+                    'title' => 'Transaksi pembayaran gagal dilakukan'
+                ]);
             }
             $order->response_midtrans = json_encode($this->notification->getResponse(), true);
             $order->save();
         }
-
-        // $order = new Order;
-        // $order->user_id = 1;
-        // $order->number = rand();
-        // $order->total_price = 45000;
-        // $order->payment_status = 2;
-        // $order->response_midtrans = $notif->transaction_status;
-        // $order->response_midtrans = json_encode($notif->getResponse(), true);
-        // $order->response_midtrans = json_encode($request->all(), true);
-        // $order->save();
     }
 
     public function generateUniqueCode()
