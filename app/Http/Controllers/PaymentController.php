@@ -56,7 +56,7 @@ class PaymentController extends Controller
         
 
         if (empty($user->order) || (!empty($user->order) && ($user->order->payment_status == 0 || $user->order->payment_status == 3 || $user->order->payment_status == 4))) {
-            $price = 1000;
+            $price = 10000;
             // $price = 40000;
 
             $order_id = $this->generateUniqueCode();
