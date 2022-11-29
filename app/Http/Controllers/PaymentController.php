@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Midtrans\Notification;
 use Midtrans\Config;
 use Midtrans\Snap;
+use Midtrans\Transaction;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\ActivityLog;
@@ -29,6 +30,9 @@ class PaymentController extends Controller
     {
         $user = auth()->user();
 
+        // $data = Transaction::status(1760524932);
+        // return response()->json($data);
+
         if (!empty($user->order) && $user->order->payment_status == 2) {
             return response()->json([
                 'status' => 'error',
@@ -51,7 +55,7 @@ class PaymentController extends Controller
         // }
         
 
-        if (empty($user->order) || (!empty($user->order) && ($user->order->payment_status == 3 || $user->order->payment_status == 4))) {
+        if (empty($user->order) || (!empty($user->order) && ($user->order->payment_status == 0 || $user->order->payment_status == 3 || $user->order->payment_status == 4))) {
             $price = 40000;
 
             $order_id = $this->generateUniqueCode();
