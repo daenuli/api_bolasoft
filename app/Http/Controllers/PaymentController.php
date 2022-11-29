@@ -162,15 +162,12 @@ class PaymentController extends Controller
 
     public function notification(Request $request)
     {
-        // dd($request->all());
-        // $notif = new Notification();
         $this->_handleNotification();
         
         if ($this->isSignatureKeyVerified()) {
-            // if ($this->notification->getResponse()) {
             $order = Order::where('number', $this->notification->order_id)->first();
             if ($this->notification->transaction_status == 'pending') {
-                $order->payment_status = 1;
+                $order->payment_status = '1';
                 ActivityLog::updateOrCreate(
                     ['user_id' => $order->id, 'type' => 'payment'],
                     ['title' => 'Pembayaran Anda belum selesai, silahkan menyelesaikan pembayaran']
@@ -181,7 +178,7 @@ class PaymentController extends Controller
                 // $user->confirmed = 'y';
                 // $user->save();
 
-                $order->payment_status = 2;
+                $order->payment_status = '2';
 
                 // ActivityLog::create([
                 //     'user_id' => $order->user_id, 
@@ -194,14 +191,13 @@ class PaymentController extends Controller
                 );
 
             } else if ($this->notification->transaction_status == 'expire') {
-                $order->payment_status = 3;
-
+                $order->payment_status = '3';
                 ActivityLog::updateOrCreate(
                     ['user_id' => $order->id, 'type' => 'payment'],
                     ['title' => 'Batas pembayaran telah berakhir, silahkan ulangi pembayaran']
                 );
             } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
-                $order->payment_status = 4;
+                $order->payment_status = '4';
                 ActivityLog::updateOrCreate(
                     ['user_id' => $order->id, 'type' => 'payment'],
                     ['title' => 'Transaksi pembayaran gagal dilakukan']
