@@ -131,7 +131,8 @@ class ClubController extends Controller
             $data->class_id = $request->class_id;
             $data->status = 1;
             $data->confirm = 'waiting';
-            $data->created_at = Carbon::now();
+            $data->created_at = Carbon::now()->timezone('Asia/Jakarta');
+            $data->updated_at = Carbon::now()->timezone('Asia/Jakarta');
             $data->save();
 
             return response()->json([
