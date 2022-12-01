@@ -7,7 +7,7 @@ use App\Models\Classes;
 use App\Models\Club;
 use App\Models\User;
 use App\Models\StudentClass;
-use App\Models\Paguyuban;
+use App\Models\ClubPaguyuban;
 use Carbon\Carbon;
 
 class ClubController extends Controller
@@ -59,7 +59,7 @@ class ClubController extends Controller
     public function show($id)
     {
         $data = Club::find($id);
-        $paguyuban = Paguyuban::where([
+        $paguyuban = ClubPaguyuban::where([
                         ['club_id', $id],
                         ['status', 1],
                         ['confirm', 'approve'],
