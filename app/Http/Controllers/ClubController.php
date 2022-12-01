@@ -7,6 +7,7 @@ use App\Models\Classes;
 use App\Models\Club;
 use App\Models\User;
 use App\Models\StudentClass;
+use App\Models\Paguyuban;
 use Carbon\Carbon;
 
 class ClubController extends Controller
@@ -58,7 +59,11 @@ class ClubController extends Controller
     public function show($id)
     {
         $data = Club::find($id);
-
+        $paguyuban = Paguyuban::where([
+                        ['club_id', $id],
+                        ['status', 1],
+                        ['confirm', 'approve'],
+                    ])->count();
         $club = [
             'id' => $data->id,
             'name' => $data->name,
@@ -70,12 +75,9 @@ class ClubController extends Controller
             'description' => ($data->desc) ? $data->desc : '',
             'thumbnail_image' => ($data->thumbnail_image_path) ? config('app.bolasoft_url').$data->thumbnail_image_path : '',
             'coach' => $data->coach->count() . ' pelatih',
-            // 'coach' => '3 pelatih',
-            'association' => 'Terdaftar di 3 Asosiasi/Paguyuban',
-            // 'thumbnail_image' => url($data->thumbnail_image),
+            'association' => 'Terdaftar di '.$paguyuban.' Paguyuban',
             'number_of_student' => $data->number_of_student,
             'is_premium' => $data->is_premium,
-            // 'images' => $images
             'images' => $data->events->map(function ($item, $key) {
                 return [
                     'id' => $item->id,
