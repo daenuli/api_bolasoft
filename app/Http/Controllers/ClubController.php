@@ -48,7 +48,6 @@ class ClubController extends Controller
                 'club_name' => $item->club_name,
                 'telp' => $item->telp,
                 'address' => $item->address,
-                'maps' => $item->maps,
                 'number_of_student' => $item->number_of_student,
                 'thumbnail_image_path' => ($item->thumbnail_image_path) ? config('app.bolasoft_url').$item->thumbnail_image_path : '',
             ];
@@ -67,6 +66,7 @@ class ClubController extends Controller
             'address' => $data->address,
             'latitude' => $data->latitude,
             'longitude' => $data->longitude,
+            'maps' => $data->maps,
             'description' => ($data->desc) ? $data->desc : '',
             'thumbnail_image' => ($data->thumbnail_image_path) ? config('app.bolasoft_url').$data->thumbnail_image_path : '',
             'coach' => $data->coach->count() . ' pelatih',
