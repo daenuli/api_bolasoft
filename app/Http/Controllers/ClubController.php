@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\StudentClass;
 use App\Models\ClubPaguyuban;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 
 class ClubController extends Controller
 {
@@ -47,7 +47,7 @@ class ClubController extends Controller
                 'id' => $item->id,
                 'province_name' => $item->province_name,
                 'paguyuban_name' => $item->paguyuban_name,
-                'club_name' => Str::limit($item->club_name, 25),
+                'club_name' => $item->club_name,
                 'telp' => $item->telp,
                 'address' => $item->address,
                 'number_of_student' => $item->number_of_student,
@@ -82,7 +82,7 @@ class ClubController extends Controller
             'images' => $data->events->map(function ($item, $key) {
                 return [
                     'id' => $item->id,
-                    'name' => Str::limit($item->name, 25),
+                    'name' => $item->name,
                     'image_path' => config('app.bolasoft_url').$item->image_path,
                 ];
             })
