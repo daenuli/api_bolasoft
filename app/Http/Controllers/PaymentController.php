@@ -89,7 +89,7 @@ class PaymentController extends Controller
 
             Order::updateOrCreate(
                 ['user_id' => $user->id],
-                ['status' => '0', 'number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
+                ['payment_status' => '0', 'number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
             );
 
             return response()->json($midtrans);
