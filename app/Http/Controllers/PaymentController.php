@@ -89,17 +89,8 @@ class PaymentController extends Controller
 
             Order::updateOrCreate(
                 ['user_id' => $user->id],
-                ['status' => 0, 'number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
+                ['status' => '0', 'number' => $order_id, 'total_price' => $price, 'snap_token' => $midtrans->token, 'redirect_url' => $midtrans->redirect_url]
             );
-
-            // return response()->json($midtrans);
-            // $order = new Order;
-            // $order->user_id = $user->id;
-            // $order->number = $order_id;
-            // $order->total_price = $price;
-            // $order->snap_token = $midtrans->token;
-            // $order->redirect_url = $midtrans->redirect_url;
-            // $order->save();
 
             return response()->json($midtrans);
         }
