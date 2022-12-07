@@ -41,6 +41,7 @@ class TournamentTomorrow extends Command
                 'user_id' => $item->player->student->siswa->id,
                 'type' => 'tournament',
                 'title' => 'Persiapkan dirimu, Besok ada pertandingan. Cek Jadwal Pertandingan yak',
+                'icon' => 'party',
                 'competition_id' => $item->match->tournament->competition_id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

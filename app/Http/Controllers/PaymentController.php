@@ -162,24 +162,28 @@ class PaymentController extends Controller
                 $order->payment_status = '1';
                 ActivityLog::updateOrCreate([
                     'user_id' => $order->user_id, 'type' => 'payment',
+                    'icon' => 'smile_pay',
                     'title' => 'Pembayaran Anda belum selesai, silahkan menyelesaikan pembayaran'
                 ]);
             } else if ($this->notification->transaction_status == 'capture' || $this->notification->transaction_status == 'settlement') {
                 $order->payment_status = '2';
                 ActivityLog::updateOrCreate([
                     'user_id' => $order->user_id, 'type' => 'payment',
+                    'icon' => 'smile',
                     'title' => 'Yaay, Kamu telah menyelesaikan pembayaran. Lanjut pilih SSB yak!'
                 ]);
             } else if ($this->notification->transaction_status == 'expire') {
                 $order->payment_status = '3';
                 ActivityLog::updateOrCreate([
                     'user_id' => $order->user_id, 'type' => 'payment', 
+                    'icon' => 'disappointed',
                     'title' => 'Batas pembayaran telah berakhir, silahkan ulangi pembayaran'
                 ]);
             } else if ($this->notification->transaction_status == 'cancel' || $this->notification->transaction_status == 'deny' || $this->notification->transaction_status == 'failure') {
                 $order->payment_status = '4';
                 ActivityLog::create([
                     'user_id' => $order->user_id, 'type' => 'payment', 
+                    'icon' => 'disappointed',
                     'title' => 'Transaksi pembayaran gagal dilakukan'
                 ]);
             }
