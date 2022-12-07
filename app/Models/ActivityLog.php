@@ -12,6 +12,7 @@ class ActivityLog extends Model
         'schedule_id', 
         'type', 
         'title', 
+        'icon', 
         'is_read'
     ];
 }

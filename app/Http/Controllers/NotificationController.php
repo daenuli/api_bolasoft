@@ -21,6 +21,7 @@ class NotificationController extends Controller
                     return [
                         'id' => $item->id,
                         'name' => 'System Bolasoft',
+                        'icon' => $item->icon,
                         'type' => $item->type,
                         'message' => $item->title,
                         'date' => Carbon::parse($item->created_at)->format('F d, Y'),

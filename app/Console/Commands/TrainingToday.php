@@ -40,6 +40,7 @@ class TrainingToday extends Command
                 'user_id' => $item->user->id,
                 'type' => 'training',
                 'title' => 'Hari ini ada latihan loh, Jangan lupa hadir yak!',
+                'icon' => 'hugging',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

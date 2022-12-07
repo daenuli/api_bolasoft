@@ -22,6 +22,16 @@ class ClubController extends Controller
 
     // }
 
+    // public function index(Request $request)
+    // {
+    //     $user = auth()->user();
+    //     $club_name = $request->club_name;
+    //     $province_name = $request->province_name;
+    //     $paguyuban_name = $request->paguyuban_name;
+
+
+    // }
+
     public function index(Request $request)
     {
         $user = auth()->user();

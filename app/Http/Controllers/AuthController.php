@@ -165,6 +165,7 @@ class AuthController extends Controller
             ActivityLog::create([
                 'user_id' => $user->id, 
                 'type' => 'signup',
+                'icon' => 'smile_pay',
                 'title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!'
             ]);
 

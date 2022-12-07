@@ -41,6 +41,7 @@ class TournamentWeeks extends Command
                 'user_id' => $item->player->student->siswa->id,
                 'type' => 'tournament',
                 'title' => 'Jadwal Tournament '.$item->match->tournament->name.' sudah semakin dekat. Tingkatkan latihanmu dan jangan lupa jaga kesehatanmu yak',
+                'icon' => 'panic',
                 'competition_id' => $item->match->tournament->competition_id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
