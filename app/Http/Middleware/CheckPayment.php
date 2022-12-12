@@ -33,22 +33,5 @@ class CheckPayment
         }
 
         return $next($request);
-
-
-        // if (!empty($payment) && $payment->payment_status == 2) {
-        //     if (isset($detail)) {
-        //         return $next($request);
-        //     } else {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => 'Silahkan lengkapi profile terlebih dahulu'
-        //         ]);
-        //     }
-        // } else {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Silahkan lakukan pembayaran terlebih dahulu'
-        //     ]);
-        // }
     }
 }

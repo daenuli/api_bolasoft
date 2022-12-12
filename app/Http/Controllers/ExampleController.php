@@ -1,49 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-// use App\Mail\OrderShipped;
 use Illuminate\Support\Facades\Mail;
-use App\Models\Student;
-// use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ExampleController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request)
     {
-        //
-    }
+        $fileName = $request->photo->getClientOriginalName();
+        $filePath = 'student/'.$fileName;
 
-    public function test_email()
-    {
-        // Mail::to('giarsyani.nuli@gmail.com')->send(new OrderShipped());
-    }
+        $path = Storage::disk('s3')->put($filePath, file_get_contents($request->photo));
+        $data = Storage::disk('s3')->url($path);
 
-    // public function test_auth()
-    // {
-    //     $user = auth()->user();
-    //     $user->confirmed = 'y';
-    //     $user->save();
-    // }
-
-    public function index()
-    {
-        // return Carbon::now();
-        // $pertama = Student::oldest()->first();
-        // $terakhir = Student::latest()->first();
-        // // dd($pertama->created_at);
-        // // return $pertama->created_at;
-
-        // $startDate = Carbon::createFromFormat('Y-m-d',$pertama->created_at);
-        // $endDate = Carbon::createFromFormat('Y-m-d',$terakhir->created_at);
-
-        // $check = Carbon::now()->between($startDate, $endDate);
-        // dd($check);
-        // return response()->json($student);
+        return response()->json($data);
     }
 
     //
