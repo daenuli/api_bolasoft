@@ -47,7 +47,7 @@ class ClubController extends Controller
                 'paguyuban_name' => $item->paguyuban->name ?? '',
                 'club_name' => $item->club->name ?? '',
                 'telp' => $item->club->telp,
-                'address' => $item->club->address,
+                'address' => $item->club->address.' ('.$item->paguyuban->province->name.')',
                 'number_of_student' => isset($item->club->student_class_active) ? $item->club->student_class_active->count() : 0,
                 'thumbnail_image_path' => ($item->club->thumbnail_image_path) ? config('app.bolasoft_url').$item->club->thumbnail_image_path : '',
             ];
