@@ -14,4 +14,9 @@ class Paguyuban extends Model
     public function clubs(){
         return $this->hasMany(Club::class);
     }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }

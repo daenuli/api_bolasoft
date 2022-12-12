@@ -170,12 +170,6 @@ class AuthController extends Controller
             ]);
 
             return view('emails.activation');
-            
-            // return redirect()->route('home');
-            // return response()->json([
-            //     'status' => 'success',
-            //     'message' => 'Aktivasi akun berhasil'
-            // ]);
         }
     }
 }

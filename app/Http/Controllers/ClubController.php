@@ -13,26 +13,49 @@ use Carbon\Carbon;
 
 class ClubController extends Controller
 {
-    // public function _index(Request $request)
-    // {
-    //     $user = auth()->user();
-    //     $club_name = $request->club_name;
-    //     $province_name = $request->province_name;
-    //     $paguyuban_name = $request->paguyuban_name;
-
-    // }
-
-    // public function index(Request $request)
-    // {
-    //     $user = auth()->user();
-    //     $club_name = $request->club_name;
-    //     $province_name = $request->province_name;
-    //     $paguyuban_name = $request->paguyuban_name;
-
-
-    // }
-
     public function index(Request $request)
+    {
+        $user = auth()->user();
+        $club = $request->club_name;
+        $province = $request->province_name;
+        $paguyuban = $request->paguyuban_name;
+
+        $club_paguyuban = ClubPaguyuban::where([
+                    ['status', 1],
+                    ['confirm', 'approve']
+                ])
+                ->when($club, function ($query, $club) {
+                    $query->whereHas('club', function ($q) use ($club) {
+                        $q->where('name', 'like', '%'.$club.'%');
+                    });
+                })
+                ->when($province, function ($query, $province) {
+                    $query->whereHas('paguyuban.province', function ($q) use ($province) {
+                        $q->where('name', 'like', '%'.$province.'%');
+                    });
+                })
+                ->when($paguyuban, function ($query, $paguyuban) {
+                    $query->whereHas('paguyuban', function ($q) use ($paguyuban) {
+                        $q->where('name', 'like', '%'.$paguyuban.'%');
+                    });
+                })
+                ->get();
+        $data = $club_paguyuban->map(function ($item, $key) {
+            return [
+                'id' => $item->club_id,
+                'province_name' => $item->paguyuban->province->name ?? '',
+                'paguyuban_name' => $item->paguyuban->name ?? '',
+                'club_name' => $item->club->name ?? '',
+                'telp' => $item->club->telp,
+                'address' => $item->club->address,
+                'number_of_student' => isset($item->club->student_class_active) ? $item->club->student_class_active->count() : 0,
+                'thumbnail_image_path' => ($item->club->thumbnail_image_path) ? config('app.bolasoft_url').$item->club->thumbnail_image_path : '',
+            ];
+        });
+        return response()->json($data);
+    }
+
+    public function __index(Request $request)
     {
         $user = auth()->user();
 
@@ -113,17 +136,6 @@ class ClubController extends Controller
                 ]);
             }
 
-            // $club = Club::find($kelas->club_id);
-            // $user = User::find($user->id)->update([
-            //     'club_id' => $kelas->club_id,
-            //     'paguyuban_id' => $club->paguyuban_id,
-            // ]);
-
-            // $student = Student::find($user->detail_id);
-            // $student->club_id = $kelas->club_id;
-            // $student->class_id = $request->class_id;
-            // $student->save();
-
             $SC = StudentClass::where('student_id', $user->detail_id)
                 ->where('status', 1)
                 ->where('confirm', 'accept')
@@ -134,10 +146,6 @@ class ClubController extends Controller
                     'message' => 'Silahkan hubungi ssb sebelumnya untuk me-non-aktifkan akunnya'
                 ]);
             }
-
-            // $user = User::find($user->id);
-            // $user->confirmed = 'p';
-            // $user->save();
 
             $data = new StudentClass;
             $data->student_id = $user->detail_id;

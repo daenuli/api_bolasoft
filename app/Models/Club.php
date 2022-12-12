@@ -31,4 +31,8 @@ class Club extends Model
         return $this->hasMany(ClubCoach::class, 'club_id');
     }
 
+    public function student_class_active()
+    {
+        return $this->hasMany(StudentClass::class, 'club_id')->where('status', 1);
+    }
 }

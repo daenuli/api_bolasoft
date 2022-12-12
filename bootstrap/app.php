@@ -64,6 +64,7 @@ $app->configure('auth');
 $app->configure('midtrans');
 $app->configure('mail');
 $app->configure('queue');
+$app->configure('filesystems');
 
 /*
 |--------------------------------------------------------------------------

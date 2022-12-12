@@ -12,38 +12,12 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-// use App\Models\ActivityLog;
-// use App\Models\StudentClass;
-// use Carbon\Carbon;
-// use Illuminate\Database\Eloquent\Builder;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
-    // $date_now = Carbon::now()->toDateString();
-
-    // $data = StudentClass::where([
-    //     ['status', 1],
-    //     ['confirm', 'accept']
-    // ])->whereHas('schedule', function (Builder $query) use ($date_now) {
-    //     $query->whereDate('date', $date_now);
-    // })->get()->map(function ($item, $key) {
-    //     return [
-    //         'schedule_id' => $item->schedule->id,
-    //         'user_id' => $item->user->id,
-    //         'type' => 'training',
-    //         'title' => 'Hari ini ada latihan loh, Jangan lupa hadir yak!',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ];
-    // })->toArray();
-    // ActivityLog::insert($data);
-    // ActivityLog::updateOrCreate(
-    //     ['user_id' => $user->id, 'type' => 'tournament', 'competition_id' => ],
-    //     ['title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!']
-    // );
-
-    // return response()->json($data);
 });
+
+// $router->post('image', 'ExampleController@index');
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('test', function () {
@@ -92,5 +66,3 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 // Route::get('/aktivasi/student/{token}', 'Auth\RegisterController@ActivationStudent')->name('activation.student');
 
 });  
-
-// $router->get('growth', 'ExampleController@index');
