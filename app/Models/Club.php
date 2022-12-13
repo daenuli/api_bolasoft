@@ -33,6 +33,7 @@ class Club extends Model
 
     public function student_class_active()
     {
-        return $this->hasMany(StudentClass::class, 'club_id')->where('status', 1);
+        return $this->hasMany(StudentClass::class, 'club_id')->where('status', 1)->where('confirm', 'accept');
+        // return $this->hasMany(StudentClass::class, 'club_id')->where('status', 1);
     }
 }

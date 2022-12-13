@@ -43,7 +43,7 @@ class AboutController extends Controller
         $user = auth()->user();
         $detail = auth()->user()->student;
         $payment = auth()->user()->order;
-        $student_class = auth()->user()->student_class;
+        $student_class = auth()->user()->student_status;
 
         $log = ActivityLog::where('user_id', $user->id);
         $unread = $log->where('is_read', 0)->count();
