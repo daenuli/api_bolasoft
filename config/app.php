@@ -110,6 +110,6 @@ return [
 
     'bolasoft_url' => env('APP_BOLASOFT_URL', 'http://103.152.118.136:5005'),
     'bolasoft_url_api' => env('APP_BOLASOFT_URL_API', 'http://api-bolasoft.inovis.id'),
-    'aws_s3' => 'https://'.env('AWS_BUCKET').'.s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com';
+    'aws_s3' => 'https://'.env('AWS_BUCKET').'.s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com'
 
 ];
