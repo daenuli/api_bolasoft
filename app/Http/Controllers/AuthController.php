@@ -157,19 +157,22 @@ class AuthController extends Controller
     {
         $user = User::find(decrypt($request->token));
 
-        if ($user->is_active != 'y') {
+        if (isset($user)) {
+            if ($user->is_active != 'y') {
 
-            $user->is_active = 'y';
-            $user->save();
+                $user->is_active = 'y';
+                $user->save();
 
-            ActivityLog::create([
-                'user_id' => $user->id, 
-                'type' => 'signup',
-                'icon' => 'smile_pay',
-                'title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!'
-            ]);
+                ActivityLog::create([
+                    'user_id' => $user->id, 
+                    'type' => 'signup',
+                    'icon' => 'smile_pay',
+                    'title' => 'Kamu belum menyelesaikan Pembayaran nih. Selesaikan pembayaranmu yak!'
+                ]);
 
-            return view('emails.activation');
+                return view('emails.activation');
+            }
         }
+        return view('emails.activation_not_found');
     }
 }
