@@ -30,7 +30,7 @@ class AboutController extends Controller
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
             'date_of_birth' => isset($student) ? $student->date_of_birth : '',
             'age' => isset($student) ? Carbon::parse($student->date_of_birth)->age : '',
-            'thumbnail_image' => isset($student) ? config('app.bolasoft_url_api').$student->thumbnail_image_path : '',
+            'thumbnail_image' => isset($student) ? config('app.aws_s3').$student->thumbnail_image_path : '',
             'ssb_name' => isset($user->club) && ($user->confirmed == 'y') ? $user->club->name : '',
             'is_complete' =>isset($student) ? true : false,
             'payment_status' => (!empty($payment) && $payment->payment_status == 2) ? true : false
@@ -47,8 +47,7 @@ class AboutController extends Controller
 
         $log = ActivityLog::where('user_id', $user->id);
         $unread = $log->where('is_read', 0)->count();
-        // $read = $log->where('is_read', 1)->count();
-        
+
         $ssb_name = "";
         $ssb_image = "";
         $ssb_address = "";
@@ -60,7 +59,7 @@ class AboutController extends Controller
             } else if ($student_class->confirm == 'accept') {
                 $ssb_confirm = 'request_keluar';
                 $ssb_name = $student_class->club->name ?? '';
-                $ssb_image = isset($student_class->club->thumbnail_image_path) ? config('app.bolasoft_url').$student_class->club->thumbnail_image_path : '';
+                $ssb_image = isset($student_class->club->thumbnail_image_path) ? config('app.aws_s3').$student_class->club->thumbnail_image_path : '';
                 $ssb_address = $student_class->club->address ?? '';
             } else if ($student_class->confirm == 'decline') {
                 $ssb_confirm = 'pilih_sekolah';
@@ -75,10 +74,10 @@ class AboutController extends Controller
             'role' => $user->role,
             'ssb_confirmed' => $ssb_confirm,
             'email_confirmed' => ($user->is_active == 'y') ? true : false,
-            'thumbnail_image' => !empty($detail->thumbnail_image_path) ? config('app.bolasoft_url_api').$detail->thumbnail_image_path : '',
-            'akta_image' => !empty($user->student_asset('akta_lahir')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('akta_lahir')->first()->path : '',
-            'ijazah_image' => !empty($user->student_asset('ijasah')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('ijasah')->first()->path : '',
-            'kartu_keluarga_image' => !empty($user->student_asset('kartu_keluarga')->first()->path) ? config('app.bolasoft_url_api').$user->student_asset('kartu_keluarga')->first()->path : '',
+            'thumbnail_image' => !empty($detail->thumbnail_image_path) ? config('app.aws_s3').$detail->thumbnail_image_path : '',
+            'akta_image' => !empty($user->student_asset('akta_lahir')->first()->path) ? config('app.aws_s3').$user->student_asset('akta_lahir')->first()->path : '',
+            'ijazah_image' => !empty($user->student_asset('ijasah')->first()->path) ? config('app.aws_s3').$user->student_asset('ijasah')->first()->path : '',
+            'kartu_keluarga_image' => !empty($user->student_asset('kartu_keluarga')->first()->path) ? config('app.aws_s3').$user->student_asset('kartu_keluarga')->first()->path : '',
             'nik' => !empty($detail->nik) ? $detail->nik : '',
             'nick_name' => !empty($detail->nick_name) ? $detail->nick_name : '',
             'address' => !empty($detail->address) ? $detail->address : '',
@@ -185,7 +184,6 @@ class AboutController extends Controller
 
                 if (isset($data)) {
                     foreach ($data as $key => $value) {
-
                         $student_asset = new StudentAsset;
                         $student_asset->student_id = $student->id;
                         $student_asset->name = $value['name'];
@@ -193,7 +191,6 @@ class AboutController extends Controller
                         $student_asset->status = $value['status'];
                         $student_asset->path = $value['path'];
                         $student_asset->save();
-
                     }
                 }
 
@@ -201,7 +198,6 @@ class AboutController extends Controller
                     'status' => 'success',
                     'message' => 'Profil berhasil diperbarui'
                 ]);
-
             }
 
         } else {
