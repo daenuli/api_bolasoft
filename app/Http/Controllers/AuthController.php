@@ -38,11 +38,7 @@ class AuthController extends Controller
             $user->role = 'student';
             $user->is_active = 'n';
             $user->save();
-            // send session
-            // Session::flash('info', 'Silahkan Aktivasi akun anda via <a href="https://www.gmail.com" target="_blank" class="badge badge-warning text-dark"> email </a>');
-            // prepare send token
             $url = route('activation.student', ['token'=>encrypt($user->id)]);
-            // $to = $req->email;
             $param = array(
                 'name' => $user->name,
                 'email' => $user->email,
@@ -67,10 +63,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // $this->validate($request, [
-        //     'email' => 'required|string|email',
-        //     'password' => 'required|min:6',
-        // ]);
         if (empty($request->email) or empty($request->password)) {
             return response()->json([
                 'status' => 'error',
@@ -91,8 +83,6 @@ class AuthController extends Controller
         $user = auth()->user();
         if ($user->is_active == 'n') {
             auth()->logout();
-            // auth()->refresh();
-            // auth()->invalidate();
 
             return response()->json([
                 'status' => 'error',
