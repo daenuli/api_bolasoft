@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    supervisor
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -41,5 +42,17 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 RUN chown -R www-data:www-data /var/www/
+
+COPY docker/start.sh /usr/local/bin/start
+
+RUN chown -R $user: /var/www && chmod u+x /usr/local/bin/start
+
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
+
+RUN mkdir -p "/etc/supervisor/logs"
+
+#ADD docker/supervisor.conf /etc/supervisor/conf.d/worker.conf
+
+CMD ["/usr/local/bin/start"]
 
 USER $user
