@@ -49,46 +49,46 @@ class ClubController extends Controller
                 'telp' => $item->club->telp,
                 'address' => $item->club->address.' ('.$item->paguyuban->province->name.')',
                 'number_of_student' => isset($item->club->student_class_active) ? $item->club->student_class_active->count() : 0,
-                'thumbnail_image_path' => ($item->club->thumbnail_image_path) ? config('app.bolasoft_url').$item->club->thumbnail_image_path : '',
+                'thumbnail_image_path' => ($item->club->thumbnail_image_path) ? config('app.aws_s3').$item->club->thumbnail_image_path : '',
             ];
         });
         return response()->json($data);
     }
 
-    public function __index(Request $request)
-    {
-        $user = auth()->user();
+    // public function __index(Request $request)
+    // {
+    //     $user = auth()->user();
 
-        $club_name = $request->club_name;
-        $province_name = $request->province_name;
-        $paguyuban_name = $request->paguyuban_name;
-        $club = Club::leftJoin('paguyubans', 'clubs.paguyuban_id', '=', 'paguyubans.id')
-                ->leftJoin('provinces', 'paguyubans.province_id', '=', 'provinces.id_propinsi')
-                ->select('clubs.id', 'provinces.nama_propinsi as province_name', 'paguyubans.name as paguyuban_name', 'clubs.name as club_name', 'clubs.telp', 'clubs.address', 'clubs.number_of_student', 'clubs.thumbnail_image_path')
-                ->when($club_name, function ($query, $club_name) {
-                    $query->where('clubs.name', 'like', '%'.$club_name.'%');
-                })
-                ->when($province_name, function ($query, $province_name) {
-                    $query->where('provinces.nama_propinsi', 'like', '%'.$province_name.'%');
-                })
-                ->when($paguyuban_name, function ($query, $paguyuban_name) {
-                    $query->where('paguyubans.name', 'like', '%'.$paguyuban_name.'%');
-                })
-                ->get();
-        $data = $club->map(function ($item, $key) {
-            return [
-                'id' => $item->id,
-                'province_name' => $item->province_name,
-                'paguyuban_name' => $item->paguyuban_name,
-                'club_name' => $item->club_name,
-                'telp' => $item->telp,
-                'address' => $item->address,
-                'number_of_student' => $item->number_of_student,
-                'thumbnail_image_path' => ($item->thumbnail_image_path) ? config('app.bolasoft_url').$item->thumbnail_image_path : '',
-            ];
-        });
-        return response()->json($data);
-    }
+    //     $club_name = $request->club_name;
+    //     $province_name = $request->province_name;
+    //     $paguyuban_name = $request->paguyuban_name;
+    //     $club = Club::leftJoin('paguyubans', 'clubs.paguyuban_id', '=', 'paguyubans.id')
+    //             ->leftJoin('provinces', 'paguyubans.province_id', '=', 'provinces.id_propinsi')
+    //             ->select('clubs.id', 'provinces.nama_propinsi as province_name', 'paguyubans.name as paguyuban_name', 'clubs.name as club_name', 'clubs.telp', 'clubs.address', 'clubs.number_of_student', 'clubs.thumbnail_image_path')
+    //             ->when($club_name, function ($query, $club_name) {
+    //                 $query->where('clubs.name', 'like', '%'.$club_name.'%');
+    //             })
+    //             ->when($province_name, function ($query, $province_name) {
+    //                 $query->where('provinces.nama_propinsi', 'like', '%'.$province_name.'%');
+    //             })
+    //             ->when($paguyuban_name, function ($query, $paguyuban_name) {
+    //                 $query->where('paguyubans.name', 'like', '%'.$paguyuban_name.'%');
+    //             })
+    //             ->get();
+    //     $data = $club->map(function ($item, $key) {
+    //         return [
+    //             'id' => $item->id,
+    //             'province_name' => $item->province_name,
+    //             'paguyuban_name' => $item->paguyuban_name,
+    //             'club_name' => $item->club_name,
+    //             'telp' => $item->telp,
+    //             'address' => $item->address,
+    //             'number_of_student' => $item->number_of_student,
+    //             'thumbnail_image_path' => ($item->thumbnail_image_path) ? config('app.bolasoft_url').$item->thumbnail_image_path : '',
+    //         ];
+    //     });
+    //     return response()->json($data);
+    // }
 
     public function show($id)
     {
@@ -107,7 +107,7 @@ class ClubController extends Controller
             'longitude' => $data->longitude,
             'maps' => $data->maps,
             'description' => ($data->desc) ? $data->desc : '',
-            'thumbnail_image' => ($data->thumbnail_image_path) ? config('app.bolasoft_url').$data->thumbnail_image_path : '',
+            'thumbnail_image' => ($data->thumbnail_image_path) ? config('app.aws_s3').$data->thumbnail_image_path : '',
             'coach' => $data->coach->count() . ' pelatih',
             'association' => 'Terdaftar di '.$paguyuban.' Paguyuban',
             'number_of_student' => $data->number_of_student,
@@ -116,7 +116,7 @@ class ClubController extends Controller
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'image_path' => config('app.bolasoft_url').$item->image_path,
+                    'image_path' => config('app.aws_s3').$item->image_path,
                 ];
             })
         ];
