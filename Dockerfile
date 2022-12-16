@@ -3,7 +3,8 @@ FROM php:8.0-fpm
 # Arguments defined in docker-compose.yml
 ARG user
 #ARG uid
-
+ENV TZ=Asia/Jakarta
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -28,6 +29,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 RUN docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
+RUN printf '[PHP]\ndate.timezone = "Asia/Jakarta"\n' > /usr/local/etc/php/conf.d/tzone.ini
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
